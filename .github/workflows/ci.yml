@@ -27,6 +27,7 @@ jobs:
           toolchain: stable
       - run: cargo test --locked
       - name: deterministic end-to-end smoke test
+        shell: bash
         run: |
           cargo build --locked
           CALETA_BIN=target/debug/caleta python3 tests/e2e_mock.py
