@@ -1,0 +1,42 @@
+name: Bug report
+description: Report reproducible incorrect behavior without sensitive content
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "Do not include API keys, private prompts, model files, or vulnerability details. Use private vulnerability reporting for security issues."
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps and command
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Caleta and llama.cpp versions
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: OS, architecture, and hardware
+    validations:
+      required: true
+  - type: textarea
+    id: manifest
+    attributes:
+      label: Relevant manifest, with secrets removed
+      render: toml
+  - type: textarea
+    id: logs
+    attributes:
+      label: Prompt-free logs
+      render: text

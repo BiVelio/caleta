@@ -1,0 +1,13 @@
+/target/
+**/*.gguf
+**/*.ggml
+*.bin
+*.log
+.env
+execution.json
+conformance.json
+caleta-bench.json
+bench-results/
+.DS_Store
+__pycache__/
+*.pyc

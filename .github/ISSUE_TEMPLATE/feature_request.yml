@@ -1,0 +1,27 @@
+name: Feature request
+description: Propose a capability with clear scope and validation
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and community benefit
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior and alternatives
+    validations:
+      required: true
+  - type: textarea
+    id: boundaries
+    attributes:
+      label: Privacy, security, and compatibility impact
+  - type: textarea
+    id: validation
+    attributes:
+      label: How should the change be tested or measured?
+    validations:
+      required: true

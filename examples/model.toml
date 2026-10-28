@@ -1,0 +1,27 @@
+schema = "caleta.dev/model/v1"
+id = "publisher/model:q4"
+description = "Replace this example with a model you are licensed to use."
+license = "REPLACE-WITH-MODEL-LICENSE"
+source = "https://huggingface.co/publisher/model/resolve/main/model.gguf"
+
+[artifact]
+path = "model.gguf"
+sha256 = "0000000000000000000000000000000000000000000000000000000000000000"
+bytes = 1
+
+[backend]
+kind = "llama.cpp"
+# Use an absolute or manifest-relative path to pin the backend digest.
+executable = "llama-server"
+# sha256 = "optional-backend-digest"
+# args = ["--jinja"]
+
+[runtime]
+context_size = 4096
+gpu_layers = -1
+# threads = 8
+
+[metadata]
+quantization = "Q4_K_M"
+publisher = "replace-me"
+revision = "replace-with-an-immutable-source-revision"
