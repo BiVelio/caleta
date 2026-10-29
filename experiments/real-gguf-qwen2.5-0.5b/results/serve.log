@@ -1,0 +1,2 @@
+2026-10-29T11:11:15.971593Z  INFO local backend ready model=qwen/qwen2.5-0.5b-instruct:q4_k_m startup_ms=666
+2026-10-29T11:11:15.972410Z  INFO Caleta is ready; prompts are not logged listen=127.0.0.1:18090
