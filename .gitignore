@@ -11,3 +11,5 @@ bench-results/
 .DS_Store
 __pycache__/
 *.pyc
+!experiments/**/results/*.log
+!experiments/**/results/conformance.json

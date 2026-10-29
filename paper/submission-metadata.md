@@ -28,7 +28,7 @@ Use the same scholarly version and metadata on arXiv, Zenodo, and SSRN. Do not c
 - **Primary category:** cs.SE (Software Engineering).
 - **Cross-list:** cs.CL (Computation and Language), if the submission form permits and the author agrees with the topical fit.
 - **Authors field:** Joan-Marc Fisa (BiVelio Inc)
-- **Comments:** 12 pages, 1 figure, 2 tables. Non-peer-reviewed technical preprint. Reference implementation and reproducibility materials: https://github.com/BiVelio/caleta
+- **Comments:** 13 pages, 1 figure, 3 tables. Non-peer-reviewed technical preprint with real-GGUF validation. Reference implementation and reproducibility materials: https://github.com/BiVelio/caleta and https://github.com/BiVelio/caleta/tree/main/experiments/real-gguf-qwen2.5-0.5b
 - **Files:** upload the LaTeX source package, not only the locally generated PDF. arXiv prefers TeX/LaTeX and does not accept PDF generated from TeX as a substitute for the source.
 - **License:** CC BY 4.0. The selected license is irrevocable for that arXiv version.
 - **Journal reference and external DOI:** leave empty unless a genuine corresponding publication identifier exists. Do not put a future arXiv identifier in these fields.
@@ -42,7 +42,7 @@ Use the same scholarly version and metadata on arXiv, Zenodo, and SSRN. Do not c
 - **License:** CC-BY-4.0.
 - **Related identifier:** https://github.com/BiVelio/caleta with relation `isSupplementedBy` and resource type `software`.
 - **DOI:** reserve it in the draft if the DOI should appear inside the PDF. Regenerate the PDF with the reserved value before publishing. Never invent or guess a DOI.
-- **Version:** v1.0-preprint unless a different explicit manuscript version is chosen.
+- **Version:** v1.1-preprint (adds real-GGUF validation and academic related work).
 - **Publication date:** use the actual public deposit date.
 - **Visibility:** public. Preview the record before publishing.
 

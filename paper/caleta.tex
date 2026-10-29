@@ -22,6 +22,7 @@
 
 \setlength{\parskip}{0.35em}
 \setlength{\parindent}{0pt}
+\emergencystretch=1em
 \setlist{nosep}
 \lstset{
   basicstyle=\small\ttfamily,
@@ -34,7 +35,7 @@
 }
 
 \newcommand{\softwareversion}{0.1.0}
-\newcommand{\paperdate}{28 October 2026}
+\newcommand{\paperdate}{29 October 2026}
 \newcommand{\schema}[1]{\texttt{#1}}
 
 \title{Caleta: An Evidence-Oriented Trust Layer for\\Reproducible Local Large Language Model Inference\\[0.6em]
@@ -52,12 +53,12 @@ BiVelio Inc\\
 Copyright \copyright\ 2026 BiVelio Inc. This manuscript is licensed under \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0 International (CC BY 4.0)}.\\[0.8em]
 Corresponding author: Joan-Marc Fisa (\texttt{jmfisa@bivelio.com}).\\[0.8em]
 Software reference implementation: Caleta v\softwareversion, Apache-2.0.\\[0.8em]
-Zenodo DOI: \href{https://doi.org/10.5281/zenodo.23761755}{10.5281/zenodo.23761755}.\\[0.8em]
+Earlier-version Zenodo DOI: \href{https://doi.org/10.5281/zenodo.23761755}{10.5281/zenodo.23761755}.\\[0.8em]
 \textbf{Status:} non-peer-reviewed technical preprint.
 \end{center}
 
 \begin{abstract}
-Local large language model (LLM) inference is frequently described as private, verified, or reproducible without separating the technical claims behind those terms. A local deployment can still execute an unintended artifact, inherit unsafe configuration, expose unnecessary API routes, or publish aggregate performance results that omit failed runs and methodological differences. This paper presents \textbf{Caleta}, an Apache-2.0 process supervisor and evidence layer around llama.cpp rather than a new inference engine. Caleta combines versioned model manifests, exact-size and SHA-256 verification, controlled backend construction, a restricted OpenAI-compatible proxy, prompt-free execution records, reproducible benchmark reports, and a small conformance suite. Its research contribution is the composition of these mechanisms into explicit, machine-readable contracts that distinguish integrity from authenticated provenance and privacy controls from operating-system isolation. We evaluate the reference implementation through strict static checks, fifteen unit tests, and a deterministic end-to-end experiment covering verification, process supervision, authentication, model listing, server-sent events, conformance, and benchmarking. The experiment validates software behavior, not model accuracy, inference throughput, or llama.cpp compatibility with real GGUF artifacts. We therefore present no real-model performance claim. The resulting design offers a reproducible foundation for studying trustworthy local inference while making the remaining threats---unsigned manifests, time-of-check/time-of-use replacement, lack of TLS and OS-enforced egress isolation, and incomplete API conformance---explicit subjects for future work.
+Local large language model (LLM) inference is often described as private, verified, or reproducible without separating the technical claims behind those terms. This paper presents \textbf{Caleta}, an Apache-2.0 process supervisor and evidence layer around llama.cpp rather than a new inference engine. Caleta combines versioned manifests, exact-size and SHA-256 verification, controlled backend construction, a restricted OpenAI-compatible proxy, prompt-free execution records, benchmark reports, and a small conformance suite. Its contribution is the composition of these mechanisms into explicit contracts that distinguish integrity from authenticated provenance and privacy controls from operating-system isolation. We evaluate the implementation through static checks, fifteen unit tests, deterministic end-to-end tests on Ubuntu, macOS, and Windows, and a pinned real-model experiment on Windows CPU using Qwen2.5-0.5B-Instruct Q4\_K\_M and llama.cpp b11981. The real experiment validates artifact verification, startup, model listing, non-streaming and server-sent-event chat, and conformance. Three independent benchmark invocations produced fifteen successful warm requests with no failures. In this single configuration, median time to first token was 18.066 ms and median decode throughput was 54.394 tokens/s. These descriptive measurements do not establish cross-engine superiority, output quality, energy efficiency, or hardware-general performance. Raw JSON, commands, and environment metadata are published. Remaining challenges include signed manifests, time-of-check/time-of-use replacement, operating-system containment, proxy-overhead measurement, and broader experimental matrices.
 \end{abstract}
 
 \noindent\textbf{Keywords:} local inference; large language models; reproducibility; software supply chain; privacy engineering; benchmarking; provenance; llama.cpp.
@@ -71,7 +72,7 @@ These questions are often conflated under broad claims of privacy or verificatio
 
 Caleta addresses this narrower but consequential layer around the inference engine. It deliberately does not implement tensor kernels, a model format, or a new serving API. Instead, it wraps llama.cpp's \texttt{llama-server} with a small trust boundary and emits versioned evidence. This choice preserves GGUF interoperability \cite{gguf} and allows the measurement and conformance contracts to be reused independently of the supervisor.
 
-The manuscript makes three deliberate evidentiary restrictions. First, it reports only tests actually executed on the reference implementation. Second, its end-to-end backend is deterministic mock software, not an LLM; it validates orchestration and protocol behavior rather than inference. Third, it treats authenticated provenance, OS-level containment, real-model benchmarking, and broad API compatibility as future experimental work, not implied properties of the current system.
+The manuscript makes three deliberate evidentiary restrictions. First, it reports only tests actually executed on the reference implementation. Second, it separates deterministic mock-based orchestration tests from a real-model experiment on one Windows CPU host. Third, it treats authenticated provenance, OS-level containment, cross-engine comparison, and broader real-model matrices as future work rather than implied properties of the current system.
 
 \section{Research Questions and Contributions}
 
@@ -80,7 +81,7 @@ We organize the work around three research questions:
 \begin{description}[leftmargin=1.5em,style=nextline]
 \item[RQ1:] How can a local inference launcher make artifact integrity and runtime configuration explicit without replacing the inference engine?
 \item[RQ2:] Which operational and benchmarking evidence can be emitted without persisting prompts and responses by default?
-\item[RQ3:] To what extent can deterministic tests validate the resulting supervisor and proxy while avoiding unsupported claims about real-model execution?
+\item[RQ3:] How can deterministic tests and a real-model experiment complement each other while keeping their evidentiary scopes distinct?
 \end{description}
 
 The paper offers four contributions:
@@ -89,7 +90,7 @@ The paper offers four contributions:
 \item A composable architecture that combines artifact verification, backend supervision, restricted proxying, execution records, benchmarking, and conformance under explicit security boundaries.
 \item Versioned manifest and report contracts that separate declared provenance, observed integrity, runtime configuration, and measurement limitations.
 \item Benchmark definitions that preserve raw failures, distinguish cold startup from warm requests, and avoid converting unavailable measurements into zero-valued results.
-\item A reproducible software-validation experiment and a threat-to-validity analysis identifying the evidence still required for real-world performance or security claims.
+\item A two-layer evaluation comprising cross-platform deterministic tests and a pinned real-GGUF experiment with raw reports, commands, environment metadata, and a threat-to-validity analysis.
 \end{enumerate}
 
 The contribution is therefore not a universal performance improvement or a formal proof of privacy. It is a reference design for bounded, inspectable claims in local inference systems.
@@ -110,9 +111,13 @@ Secure software distribution requires more than file hashing. SHA-256 provides a
 
 Caleta v\softwareversion\ implements integrity comparison and provenance declaration. It does not implement signed manifests, transparency logs, remote attestation, or independently signed execution records. We reserve \emph{authenticated provenance} for mechanisms that establish the identity of the party supplying an artifact or manifest through a trusted channel.
 
+\subsection{Reproducibility and transparency in AI}
+
+Reproducibility research distinguishes the artifacts, computational environment, methodology, and analysis needed to obtain similar results \cite{gundersen,pineau}. Model cards and datasheets provide structured documentation for trained models and datasets, including their intended uses and limitations \cite{modelcards,datasheets}. Caleta operates at a complementary layer: its manifest and execution reports describe what was run and how, not how the model was trained, its full evaluation profile, or its suitability for a task. A Caleta manifest therefore should accompany, rather than replace, model and dataset documentation.
+
 \subsection{Reproducible performance evaluation}
 
-Local inference comprises at least model initialization, prompt processing, and autoregressive decoding. Combining these stages into one number obscures different system behaviors. Meaningful comparisons must hold artifact identity, quantization semantics, prompts, templates, decoding parameters, backend revisions, hardware, and power conditions as constant as practical. They must also distinguish cold starts from warm requests and describe how tokens and timing events are counted.
+Local inference comprises at least model initialization, prompt processing, and autoregressive decoding. Combining these stages into one number obscures different system behaviors. Meaningful comparisons must hold artifact identity, quantization semantics, prompts, templates, decoding parameters, backend revisions, hardware, and power conditions as constant as practical \cite{pineau}. They must also distinguish cold starts from warm requests and describe how tokens and timing events are counted.
 
 Caleta operationalizes part of this methodology in JSON. It does not measure output quality, energy, thermal throttling, GPU memory, or pure kernel time. These omissions are represented as limitations rather than estimated values.
 
@@ -202,7 +207,7 @@ It includes local HTTP and queueing overhead and ignores empty role-only events.
 \begin{equation}
 \operatorname{decode\_tps}=\frac{c-1}{t_n-t_1}.
 \end{equation}
-Observed prefill throughput is reported prompt tokens divided by TTFT; it is not a pure kernel measurement. Inter-event latency is computed over arrivals of content-bearing SSE events. Because backend chunking need not map one event to one tokenizer token, this metric is not claimed to be exact per-token latency in all backends.
+Observed prefill throughput is reported prompt tokens divided by TTFT; it is not a pure kernel measurement. Repeating an identical prompt within one backend process may also reuse cached prompt state, so this value must not be interpreted as cold prefill performance. Inter-event latency is computed over arrivals of content-bearing SSE events. Because backend chunking need not map one event to one tokenizer token, this metric is not claimed to be exact per-token latency in all backends.
 
 The schema \schema{caleta.dev/benchmark/v1} stores raw runs, token usage, estimated-token flags, cold startup, configuration, environment, failures, and limitations. On Linux, main-process resident memory is sampled approximately every 50~ms through \texttt{/proc/PID/status}; this excludes GPU memory and child processes and can miss short peaks. Missing metrics remain null.
 
@@ -237,9 +242,9 @@ The repository contains the source, lockfile, manifests, and deterministic mock.
 
 \subsection{Experimental scope}
 
-The evaluation tests software mechanisms corresponding to RQ1--RQ3. It does not estimate inference quality or performance. The end-to-end backend is a deterministic Python process that accepts the subset of llama-server arguments used by Caleta, requires the internal credential, serves health and model routes, and returns fixed chat and SSE responses. The model artifact is a 45-byte placeholder whose contents are not a valid GGUF model. This design makes protocol and lifecycle behavior repeatable without downloading weights or depending on GPU availability.
+The evaluation has two layers. The first uses a deterministic Python backend that accepts the subset of llama-server arguments used by Caleta, requires the internal credential, and returns fixed protocol responses. Its 45-byte artifact is not a valid GGUF model. This layer tests orchestration and protocol behavior without claiming inference. Local validation used Windows with rustc 1.94.1, Cargo 1.94.1, and Python 3.14.0; hosted CI subsequently covered Ubuntu, macOS, and Windows.
 
-The local validation reported here was executed on Windows with rustc 1.94.1, Cargo 1.94.1, and Python 3.14.0. A subsequent hosted CI run on Ubuntu, macOS, and Windows is reported separately below.
+The second layer executes a real Qwen2.5-0.5B-Instruct Q4\_K\_M GGUF through pinned llama.cpp binaries on one Windows CPU host. It tests artifact verification, real model startup, API behavior, conformance, and descriptive inference timing. It does not evaluate output quality, safety, energy, or cross-engine performance.
 
 \subsection{Procedure}
 
@@ -274,7 +279,7 @@ Verification E2E & Pass & Exact size/digest and pinned mock backend are accepted
 Serve/authentication E2E & Pass & Supervised proxy starts; missing public credentials are rejected; authorized models and chat requests succeed. \\
 SSE/conformance E2E & Pass & The tested stream and three conformance contracts pass against the deterministic backend. \\
 Benchmark E2E & 2 successful runs & Raw successful-run records and model digest are emitted; no prompt text is stored by default. \\
-Real GGUF inference & Not run & No claim about model loading, output quality, hardware compatibility, or performance. \\
+Mock-based inference claims & Not made & The fixture validates orchestration only; real-model evidence is reported separately below. \\
 \bottomrule
 \end{tabular}
 \caption{Local software-validation outcomes and their bounded interpretation.}
@@ -285,9 +290,48 @@ Real GGUF inference & Not run & No claim about model loading, output quality, ha
 
 After the local validation, GitHub Actions run \href{https://github.com/BiVelio/caleta/actions/runs/40758287817}{40758287817} completed successfully at source revision \texttt{d898dad904ccabbff5af40dd5906e98fd0ee6369}. The Ubuntu, macOS, and Windows test jobs passed, as did the separate formatting and Clippy job. The Ubuntu and macOS end-to-end runs included graceful-shutdown execution records; the Windows run used forced mock-process shutdown. This confirms the same mock-based contracts across the three hosted operating systems, but it does not add real-model evidence.
 
-For RQ1, the implementation demonstrates a concrete composition of manifest validation, streamed integrity verification, controlled backend construction, and restricted proxying. For RQ2, the local Windows experiment validates benchmark output without default prompt persistence, while the hosted Unix runs validate prompt-free execution records. For RQ3, deterministic tests establish the tested software paths while their inability to support real-model claims confirms the need to state evaluation scope explicitly.
-
 No tokens-per-second result from the mock is scientifically meaningful. Mock timing is intentionally excluded from the performance claims.
+
+\subsection{Real-model procedure}
+
+The real experiment used Qwen2.5-0.5B-Instruct Q4\_K\_M under Apache-2.0, pinned at Hugging Face revision \texttt{9217f5db79a2} \cite{qwenmodel}. The artifact has 491,400,032 bytes and this publisher-declared SHA-256:
+\begin{lstlisting}
+74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db
+\end{lstlisting}
+The backend was the Windows CPU asset from llama.cpp release \texttt{b11981}. Both the release archive and executable were hash-pinned. Caleta was built from revision \texttt{539ed3e32b09}. Full identifiers and digests are preserved in the public experiment artifacts.
+
+The host was an MSI MS-7A78 running Windows 10 Home 10.0.19045 with an Intel i7-7700K, four physical cores, and 15.96 GiB RAM. Execution was CPU-only with four threads, a 2,048-token context, \texttt{--jinja}, seed 42, temperature zero, and a 64-token output limit. Power state, thermal state, and unrelated system load were not measured or controlled.
+
+After successful \texttt{doctor} and \texttt{verify} checks, Caleta started the real backend on loopback. The experiment retained health and model-list responses, a non-streaming chat response, a streaming SSE session with usage and \texttt{[DONE]}, and the conformance report. The service and backend were stopped before benchmarking. Three independent benchmark invocations each performed one cold start, two warm-ups, and five measured requests with the same prompt.
+
+\subsection{Real-model results}
+
+Verification passed for the real model and backend. Model listing, non-streaming chat, and SSE streaming completed successfully, and all three conformance checks passed. All fifteen measured benchmark requests succeeded; no failures required exclusion. Table~\ref{tab:realmetrics} reports descriptive aggregates computed from the three raw reports.
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.28\textwidth}>{\raggedright\arraybackslash}p{0.25\textwidth}>{\raggedright\arraybackslash}p{0.35\textwidth}}
+\toprule
+Metric & Observed value & Scope \\
+\midrule
+Independent cold starts & 3 & One per benchmark invocation \\
+Measured warm requests & 15 & Five per invocation; zero failures \\
+Cold start, median & 835.371 ms & Range 660.720--977.129 ms \\
+TTFT, median & 18.066 ms & Range 14.574--28.004 ms \\
+Decode throughput, median & 54.394 tokens/s & Range 49.028--68.138 tokens/s \\
+Decode sample standard deviation & 6.617 tokens/s & Descriptive; not a confidence interval \\
+\bottomrule
+\end{tabular}
+\caption{Single-host real-model measurements. They are not cross-engine or hardware-general claims.}
+\label{tab:realmetrics}
+\end{table}
+
+Repeated prompts within each backend process may benefit from caching. TTFT includes HTTP and queueing, and observed prefill values are not cold kernel measurements. The experiment does not estimate public-proxy overhead because Caleta's benchmark talks directly to its supervised backend. It also does not measure energy, memory, output quality, safety, or thermal behavior. Retained chat responses provide protocol evidence, not an exact-instruction-following evaluation.
+
+The manifest, commands, environment record, raw JSON reports, SSE session, and aggregate summary are publicly available in the \href{https://github.com/BiVelio/caleta/tree/main/experiments/real-gguf-qwen2.5-0.5b}{real-GGUF experiment directory}. No model or backend binary is redistributed there.
+
+For RQ1, the real experiment confirms that the manifest, verification, supervision, and proxy operate with a pinned GGUF and llama.cpp build, complementing the deterministic tests. For RQ2, the experiment provides raw operational and benchmark evidence without private prompts; hosted Unix runs separately validate prompt-free execution records. For RQ3, the two layers demonstrate why protocol determinism and real-model validation are complementary rather than interchangeable evidence.
 
 \section{Security and Privacy Analysis}
 
@@ -322,13 +366,13 @@ Accordingly, we define the supported privacy claim narrowly: Caleta adds no tele
 
 \paragraph{Construct validity.} Integrity, declared provenance, authenticated provenance, privacy, and safety are distinct constructs. The implementation and reports use separate terms, but users could still overinterpret the word ``verified.'' The \texttt{integrity\_only} label and explicit limitations mitigate rather than eliminate this risk.
 
-\paragraph{Internal validity.} The mock backend is deterministic and suitable for orchestration tests, but it does not reproduce llama.cpp argument semantics, GGUF parsing, model initialization, tokenization, or hardware behavior. A defect visible only with a real backend would not be detected. The Windows mock uses forced process-tree shutdown, so graceful-shutdown evidence is platform-specific.
+\paragraph{Internal validity.} The mock backend does not reproduce GGUF parsing, model initialization, tokenization, or hardware behavior. The real experiment covers those mechanisms for one pinned artifact and backend revision, but cannot expose defects specific to other models, versions, or configurations. Repeated prompts may reuse cached state, and the Windows mock uses forced process-tree shutdown, so graceful-shutdown evidence remains platform-specific.
 
-\paragraph{External validity.} Local Windows validation and hosted mock-based CI on Ubuntu, macOS, and Windows cannot establish correctness across backend revisions, real model families, hardware accelerators, or adversarial conditions. The hosted run broadens operating-system evidence for the tested contracts, but it does not reduce the need for real-model and adversarial evaluation.
+\paragraph{External validity.} Hosted mock-based CI on three operating systems and one real-model Windows CPU experiment cannot establish correctness or performance across backend revisions, model families, hardware accelerators, or adversarial conditions. No macOS or Linux real-model run is claimed. The results should be generalized only through additional pinned experiments.
 
-\paragraph{Reliability.} The committed lockfile, fixed commands, deterministic responses, and versioned schemas support repetition. Future public artifacts must include exact source revisions, backend builds, manifest files, raw JSON, operating-system details, and hardware metadata.
+\paragraph{Reliability.} The committed lockfile, exact source and backend revisions, immutable model revision, publisher digests, commands, environment record, raw JSON, and versioned schemas support repetition of the reported experiment. Absolute local paths in diagnostic evidence and uncontrolled host load can affect exact repetition; timing values are not guaranteed to reproduce.
 
-\paragraph{Performance validity.} No real-model performance experiment has been conducted. The current study cannot estimate proxy overhead, cold-start distributions, prefill or decode throughput, memory use, energy, thermal effects, or output quality. No comparative ranking is made.
+\paragraph{Performance validity.} Three cold starts and fifteen warm requests provide descriptive evidence for one host, not a stable performance distribution or comparative ranking. The study cannot estimate public-proxy overhead, energy, thermal effects, output quality, or cross-hardware performance. The sample standard deviation is reported without treating it as a confidence interval, and no claims are made about prefill kernels, memory, or quality.
 
 \section{Research Agenda}
 
@@ -354,7 +398,7 @@ Conformance should expand to fragmented SSE, cancellation, concurrent requests, 
 
 Caleta explores a complementary layer in the local-LLM stack: making artifact identity, runtime configuration, exposed interfaces, and measurement methodology explicit and machine-readable. Its design avoids duplicating optimized runtimes and instead composes integrity checks, supervision, restricted proxying, prompt-free operational evidence, benchmarking, and conformance around llama.cpp.
 
-The local and hosted multi-platform evaluations validate the reference software's tested behavior and identify concrete platform issues that were corrected. They do not validate real-model inference or performance. This distinction is central to the contribution: trustworthy local inference requires claims whose scope is visible in both documentation and artifacts. Caleta provides an initial open implementation of that principle and a concrete basis for future real-model, provenance, containment, and measurement research.
+Hosted deterministic tests on three operating systems and a pinned real-GGUF experiment on Windows CPU validate the tested behavior, including real startup, chat, streaming, conformance, and benchmarking. The real measurements are deliberately scoped to one configuration and are not a comparative performance claim. This distinction is central to the contribution: trustworthy local inference requires claims whose scope is visible in both documentation and artifacts. Caleta provides an open implementation and reproducible evidence for that principle, with future work needed on broader matrices, authenticated provenance, containment, and measurement.
 
 \section*{Author and Intellectual Property}
 
@@ -364,8 +408,9 @@ The local and hosted multi-platform evaluations validate the reference software'
 
 \section*{Data and Code Availability}
 
-The reference implementation, test harness, documentation, and release runbook are available in the Caleta repository at \url{https://github.com/BiVelio/caleta}. The archival preprint record is assigned DOI \href{https://doi.org/10.5281/zenodo.23761755}{10.5281/zenodo.23761755}. Future experimental claims must be accompanied by their raw reports and reproducibility materials.
+The reference implementation, test harness, documentation, and release runbook are available at \url{https://github.com/BiVelio/caleta}. The real-model manifest, commands, environment record, raw reports, and aggregate summary are available in the \href{https://github.com/BiVelio/caleta/tree/main/experiments/real-gguf-qwen2.5-0.5b}{experiment artifacts directory}. The first public manuscript version is archived at \href{https://doi.org/10.5281/zenodo.23761755}{10.5281/zenodo.23761755}.
 
+\raggedright
 \begin{thebibliography}{99}
 
 \bibitem{llamacpp}
@@ -414,6 +459,35 @@ OpenAI.
 ggml-org.
 \newblock GGUF model format specification.
 \newblock \url{https://github.com/ggml-org/ggml/blob/master/docs/gguf.md}, accessed 28 October 2026.
+
+\bibitem{qwenmodel}
+Qwen.
+\newblock Qwen2.5-0.5B-Instruct-GGUF: model repository and license.
+\newblock \url{https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF}, accessed 29 October 2026.
+
+\bibitem{gundersen}
+Odd Erik Gundersen and Sigbjorn Kjensmo.
+\newblock State of the Art: Reproducibility in Artificial Intelligence.
+\newblock In \emph{Proceedings of the AAAI Conference on Artificial Intelligence}, 32(1):1644--1651, 2018.
+\newblock \url{https://doi.org/10.1609/aaai.v32i1.11503}.
+
+\bibitem{pineau}
+Joelle Pineau, Philippe Vincent-Lamarre, Koustuv Sinha, Vincent Lariviere, Alina Beygelzimer, Florence d'Alche-Buc, Emily Fox, and Hugo Larochelle.
+\newblock Improving Reproducibility in Machine Learning Research (A Report from the NeurIPS 2019 Reproducibility Program).
+\newblock \emph{Journal of Machine Learning Research}, 22(164):1--20, 2021.
+\newblock \url{https://jmlr.csail.mit.edu/papers/v22/20-303.html}.
+
+\bibitem{modelcards}
+Margaret Mitchell, Simone Wu, Andrew Zaldivar, Parker Barnes, Lucy Vasserman, Ben Hutchinson, Elena Spitzer, Inioluwa Deborah Raji, and Timnit Gebru.
+\newblock Model Cards for Model Reporting.
+\newblock In \emph{Proceedings of the Conference on Fairness, Accountability, and Transparency}, pages 220--229, 2019.
+\newblock \url{https://doi.org/10.1145/3287560.3287596}.
+
+\bibitem{datasheets}
+Timnit Gebru, Jamie Morgenstern, Briana Vecchione, Jennifer Wortman Vaughan, Hanna Wallach, Hal Daume III, and Kate Crawford.
+\newblock Datasheets for Datasets.
+\newblock \emph{Communications of the ACM}, 64(12):86--92, 2021.
+\newblock \url{https://doi.org/10.1145/3458723}.
 
 \end{thebibliography}
 

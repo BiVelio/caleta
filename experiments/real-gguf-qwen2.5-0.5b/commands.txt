@@ -1,0 +1,23 @@
+Real validation commands, executed from the Caleta repository root on 2026-10-29.
+The validation API key is redacted. All other values match model.toml and the retained outputs.
+
+cargo build --release --locked
+target/release/caleta.exe doctor --manifest ../validation/real-gguf/model.toml --json
+target/release/caleta.exe verify ../validation/real-gguf/model.toml --json
+
+CALETA_API_KEY=<redacted-validation-key> target/release/caleta.exe serve ../validation/real-gguf/model.toml --listen 127.0.0.1:18090 --record-out ../validation/real-gguf/results/execution.json
+
+curl http://127.0.0.1:18090/health
+curl http://127.0.0.1:18090/v1/models -H "Authorization: Bearer <redacted-validation-key>"
+
+curl http://127.0.0.1:18090/v1/chat/completions -H "Authorization: Bearer <redacted-validation-key>" -H "Content-Type: application/json" -d '{"model":"qwen/qwen2.5-0.5b-instruct:q4_k_m","messages":[{"role":"user","content":"Reply with exactly: Caleta real model OK."}],"max_tokens":16,"temperature":0,"seed":42,"stream":false}'
+
+curl -N http://127.0.0.1:18090/v1/chat/completions -H "Authorization: Bearer <redacted-validation-key>" -H "Content-Type: application/json" -d '{"model":"qwen/qwen2.5-0.5b-instruct:q4_k_m","messages":[{"role":"user","content":"Explain local AI privacy in one short sentence."}],"max_tokens":32,"temperature":0,"seed":42,"stream":true,"stream_options":{"include_usage":true}}'
+
+CALETA_API_KEY=<redacted-validation-key> target/release/caleta.exe conformance --url http://127.0.0.1:18090 --model qwen/qwen2.5-0.5b-instruct:q4_k_m --output ../validation/real-gguf/results/conformance.json
+
+The serve process and its backend were stopped before benchmarking. No llama-server process remained active.
+
+for run in 01 02 03; do target/release/caleta.exe bench ../validation/real-gguf/model.toml --output "../validation/real-gguf/results/benchmark-$run.json" --runs 5 --warmup 2 --prompt 'Explain local AI privacy in one concise paragraph.' --max-tokens 64 --seed 42; done
+
+Public copies of the outputs are under results/ in this directory. Paths refer to the original local validation workspace; substitute the public experiment directory when reproducing from a fresh checkout.
