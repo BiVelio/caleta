@@ -18,8 +18,8 @@ Use the same scholarly version and metadata on arXiv, Zenodo, and SSRN. Do not c
 - **Keywords:** local inference; large language models; reproducibility; software supply chain; privacy engineering; benchmarking; provenance; llama.cpp
 - **Code and artifacts:** https://github.com/BiVelio/caleta
 - **Validation evidence:** https://github.com/BiVelio/caleta/actions/runs/40758287817
-- **Zenodo:** published 29 October 2026 at https://zenodo.org/records/23761755
-- **Zenodo DOI:** 10.5281/zenodo.23761755 (verified to resolve to the public record)
+- **Zenodo v1.0:** published 29 October 2026 at https://zenodo.org/records/23761755 — DOI 10.5281/zenodo.23761755.
+- **Zenodo v1.1:** draft 23763881 with reserved DOI 10.5281/zenodo.23763881; not registered until publication.
 - **Zenodo all-versions DOI:** 10.5281/zenodo.23761754
 
 ## arXiv
