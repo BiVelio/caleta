@@ -13,6 +13,12 @@
 \usepackage{xcolor}
 \usepackage[colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
 \usepackage{url}
+\hypersetup{
+  pdftitle={Caleta: An Evidence-Oriented Trust Layer for Reproducible Local Large Language Model Inference},
+  pdfauthor={Joan-Marc Fisa},
+  pdfsubject={Non-peer-reviewed technical preprint on reproducible local LLM inference},
+  pdfkeywords={local inference, large language models, reproducibility, privacy engineering, benchmarking, llama.cpp}
+}
 
 \setlength{\parskip}{0.35em}
 \setlength{\parindent}{0pt}
@@ -43,10 +49,10 @@ BiVelio Inc\\
 
 \begin{center}
 \small
-Copyright \copyright\ 2026 BiVelio Inc. All rights reserved.\\[0.8em]
+Copyright \copyright\ 2026 BiVelio Inc. This manuscript is licensed under \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0 International (CC BY 4.0)}.\\[0.8em]
 Corresponding author: Joan-Marc Fisa (\texttt{jmfisa@bivelio.com}).\\[0.8em]
 Software reference implementation: Caleta v\softwareversion, Apache-2.0.\\[0.8em]
-\textbf{Status:} preprint prepared for public technical review; not yet submitted to arXiv or peer reviewed.
+\textbf{Status:} non-peer-reviewed technical preprint.
 \end{center}
 
 \begin{abstract}
@@ -232,7 +238,7 @@ The repository contains the source, lockfile, manifests, and deterministic mock.
 
 The evaluation tests software mechanisms corresponding to RQ1--RQ3. It does not estimate inference quality or performance. The end-to-end backend is a deterministic Python process that accepts the subset of llama-server arguments used by Caleta, requires the internal credential, serves health and model routes, and returns fixed chat and SSE responses. The model artifact is a 45-byte placeholder whose contents are not a valid GGUF model. This design makes protocol and lifecycle behavior repeatable without downloading weights or depending on GPU availability.
 
-The local validation reported here was executed on Windows with rustc 1.94.1, Cargo 1.94.1, and Python 3.14.0. The CI configuration additionally defines Linux, macOS, and Windows jobs, but configured jobs are not presented as completed results until executed by the hosting service.
+The local validation reported here was executed on Windows with rustc 1.94.1, Cargo 1.94.1, and Python 3.14.0. A subsequent hosted CI run on Ubuntu, macOS, and Windows is reported separately below.
 
 \subsection{Procedure}
 
@@ -246,7 +252,7 @@ cargo build --locked
 CALETA_BIN=target/debug/caleta python3 tests/e2e_mock.py
 \end{lstlisting}
 
-The end-to-end scenario constructs a temporary artifact and manifest, computes their digests, and executes verification. It starts the supervised service, checks unauthenticated rejection, performs authorized model listing and streaming chat, and runs the conformance command. It then executes one warm-up and two measured benchmark requests and inspects the resulting JSON. The Unix branch of the scenario is designed to validate graceful interruption and the resulting prompt-free execution record; that branch was not executed in the Windows run reported here. On Windows, the executed scenario uses forced process-tree shutdown for the mock and does not claim graceful-shutdown or execution-record coverage.
+The end-to-end scenario constructs a temporary artifact and manifest, computes their digests, and executes verification. It starts the supervised service, checks unauthenticated rejection, performs authorized model listing and streaming chat, and runs the conformance command. It then executes one warm-up and two measured benchmark requests and inspects the resulting JSON. The Unix branch of the scenario validates graceful interruption and the resulting prompt-free execution record; that branch was not executed in the local Windows run. The Windows scenario uses forced process-tree shutdown for the mock and does not claim graceful-shutdown or execution-record coverage.
 
 \subsection{Results}
 
@@ -274,7 +280,11 @@ Real GGUF inference & Not run & No claim about model loading, output quality, ha
 \label{tab:results}
 \end{table}
 
-For RQ1, the implementation demonstrates a concrete composition of manifest validation, streamed integrity verification, controlled backend construction, and restricted proxying. For RQ2, the implementation provides machine-readable execution-record contracts, while the executed Windows experiment validates benchmark output without default prompt persistence; execution-record generation was not exercised in that run. For RQ3, deterministic tests establish the tested software paths while their inability to support real-model claims confirms the need to state evaluation scope explicitly.
+\subsection{Hosted multi-platform confirmation}
+
+After the local validation, GitHub Actions run \href{https://github.com/BiVelio/caleta/actions/runs/40758287817}{40758287817} completed successfully at source revision \texttt{d898dad904ccabbff5af40dd5906e98fd0ee6369}. The Ubuntu, macOS, and Windows test jobs passed, as did the separate formatting and Clippy job. The Ubuntu and macOS end-to-end runs included graceful-shutdown execution records; the Windows run used forced mock-process shutdown. This confirms the same mock-based contracts across the three hosted operating systems, but it does not add real-model evidence.
+
+For RQ1, the implementation demonstrates a concrete composition of manifest validation, streamed integrity verification, controlled backend construction, and restricted proxying. For RQ2, the local Windows experiment validates benchmark output without default prompt persistence, while the hosted Unix runs validate prompt-free execution records. For RQ3, deterministic tests establish the tested software paths while their inability to support real-model claims confirms the need to state evaluation scope explicitly.
 
 No tokens-per-second result from the mock is scientifically meaningful. Mock timing is intentionally excluded from the performance claims.
 
@@ -313,7 +323,7 @@ Accordingly, we define the supported privacy claim narrowly: Caleta adds no tele
 
 \paragraph{Internal validity.} The mock backend is deterministic and suitable for orchestration tests, but it does not reproduce llama.cpp argument semantics, GGUF parsing, model initialization, tokenization, or hardware behavior. A defect visible only with a real backend would not be detected. The Windows mock uses forced process-tree shutdown, so graceful-shutdown evidence is platform-specific.
 
-\paragraph{External validity.} One local Windows environment and fifteen unit tests cannot establish correctness across backend revisions, operating systems, model families, or adversarial conditions. CI configuration broadens the intended evaluation matrix but is not itself an experimental result.
+\paragraph{External validity.} Local Windows validation and hosted mock-based CI on Ubuntu, macOS, and Windows cannot establish correctness across backend revisions, real model families, hardware accelerators, or adversarial conditions. The hosted run broadens operating-system evidence for the tested contracts, but it does not reduce the need for real-model and adversarial evaluation.
 
 \paragraph{Reliability.} The committed lockfile, fixed commands, deterministic responses, and versioned schemas support repetition. Future public artifacts must include exact source revisions, backend builds, manifest files, raw JSON, operating-system details, and hardware metadata.
 
@@ -343,12 +353,12 @@ Conformance should expand to fragmented SSE, cancellation, concurrent requests, 
 
 Caleta explores a complementary layer in the local-LLM stack: making artifact identity, runtime configuration, exposed interfaces, and measurement methodology explicit and machine-readable. Its design avoids duplicating optimized runtimes and instead composes integrity checks, supervision, restricted proxying, prompt-free operational evidence, benchmarking, and conformance around llama.cpp.
 
-The local evaluation validates the reference software's tested behavior and identifies concrete platform issues that were corrected. It does not validate real-model inference or performance. This distinction is central to the contribution: trustworthy local inference requires claims whose scope is visible in both documentation and artifacts. Caleta provides an initial open implementation of that principle and a concrete basis for future real-model, provenance, containment, and measurement research.
+The local and hosted multi-platform evaluations validate the reference software's tested behavior and identify concrete platform issues that were corrected. They do not validate real-model inference or performance. This distinction is central to the contribution: trustworthy local inference requires claims whose scope is visible in both documentation and artifacts. Caleta provides an initial open implementation of that principle and a concrete basis for future real-model, provenance, containment, and measurement research.
 
 \section*{Author and Intellectual Property}
 
 \textbf{Author and corresponding author:} Joan-Marc Fisa, BiVelio Inc, \texttt{jmfisa@bivelio.com}.\\
-\textbf{Manuscript intellectual property:} Copyright \copyright\ 2026 BiVelio Inc.\\
+\textbf{Manuscript copyright and license:} Copyright \copyright\ 2026 BiVelio Inc. Distributed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}; attribution must identify Joan-Marc Fisa as author and BiVelio Inc as copyright holder.\\
 \textbf{Reference software license:} Apache License 2.0. Third-party software and model artifacts retain their own licenses. The software license does not grant trademark rights in Caleta or BiVelio.
 
 \section*{Data and Code Availability}
