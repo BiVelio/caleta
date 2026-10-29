@@ -1,0 +1,124 @@
+{
+  "schema": "caleta.dev/benchmark/v1",
+  "created_at": "2026-10-29T11:12:56.454037Z",
+  "caleta_version": "0.1.0",
+  "model_id": "qwen/qwen2.5-0.5b-instruct:q4_k_m",
+  "model_sha256": "74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db",
+  "backend_version": "version: 0.8.0-dev (build 11981, commit da6c30ade)\r\nbuilt with Clang 20.1.8 for Windows x86_64",
+  "os": "windows",
+  "arch": "x86_64",
+  "cold_start_ms": 977.1287,
+  "context_size": 2048,
+  "gpu_layers": 0,
+  "threads": 4,
+  "max_tokens": 64,
+  "seed": 42,
+  "temperature": 0,
+  "warmup_runs": 2,
+  "prompt_sha256": "a409d66adeb3a0c553a670bd4039a5444dce00f5b13d59b05e10283a70e2cf4b",
+  "prompt_bytes": 50,
+  "runs": [
+    {
+      "run": 1,
+      "status": "ok",
+      "metrics": {
+        "total_ms": 1192.3491,
+        "ttft_ms": 18.066100000000002,
+        "decode_tps": 53.677775381685194,
+        "observed_prefill_tps": 2158.7392962509894,
+        "itl_p50_ms": 18.459699999999998,
+        "itl_p95_ms": 23.10015,
+        "itl_p99_ms": 25.258116,
+        "prompt_tokens": 39,
+        "completion_tokens": 64,
+        "token_count_estimated": false,
+        "content_events": 64
+      }
+    },
+    {
+      "run": 2,
+      "status": "ok",
+      "metrics": {
+        "total_ms": 1192.4983,
+        "ttft_ms": 23.8886,
+        "decode_tps": 53.921353395158015,
+        "observed_prefill_tps": 1632.5778823371818,
+        "itl_p50_ms": 18.1067,
+        "itl_p95_ms": 23.71024,
+        "itl_p99_ms": 28.094520000000003,
+        "prompt_tokens": 39,
+        "completion_tokens": 64,
+        "token_count_estimated": false,
+        "content_events": 64
+      }
+    },
+    {
+      "run": 3,
+      "status": "ok",
+      "metrics": {
+        "total_ms": 1254.4406000000001,
+        "ttft_ms": 19.003,
+        "decode_tps": 50.99968283054392,
+        "observed_prefill_tps": 2052.3075303899386,
+        "itl_p50_ms": 18.859399999999997,
+        "itl_p95_ms": 25.733959999999996,
+        "itl_p99_ms": 31.34436,
+        "prompt_tokens": 39,
+        "completion_tokens": 64,
+        "token_count_estimated": false,
+        "content_events": 64
+      }
+    },
+    {
+      "run": 4,
+      "status": "ok",
+      "metrics": {
+        "total_ms": 1174.8944,
+        "ttft_ms": 16.4632,
+        "decode_tps": 54.39367499986402,
+        "observed_prefill_tps": 2368.9197725837016,
+        "itl_p50_ms": 17.173000000000002,
+        "itl_p95_ms": 24.56216,
+        "itl_p99_ms": 37.21937200000008,
+        "prompt_tokens": 39,
+        "completion_tokens": 64,
+        "token_count_estimated": false,
+        "content_events": 64
+      }
+    },
+    {
+      "run": 5,
+      "status": "ok",
+      "metrics": {
+        "total_ms": 1062.2471,
+        "ttft_ms": 17.7752,
+        "decode_tps": 60.33001668268604,
+        "observed_prefill_tps": 2194.0681398802826,
+        "itl_p50_ms": 16.1628,
+        "itl_p95_ms": 18.23593,
+        "itl_p99_ms": 27.821568000000028,
+        "prompt_tokens": 39,
+        "completion_tokens": 64,
+        "token_count_estimated": false,
+        "content_events": 64
+      }
+    }
+  ],
+  "summary": {
+    "successful_runs": 5,
+    "failed_runs": 0,
+    "ttft_median_ms": 18.066100000000002,
+    "decode_tps_median": 53.921353395158015,
+    "itl_p50_ms": 18.1067,
+    "itl_p95_ms": 23.71024,
+    "itl_p99_ms": 28.094520000000003
+  },
+  "peak_backend_rss_kib": null,
+  "limitations": [
+    "single_process_warm_runs_after_one_cold_start",
+    "ttft_and_prefill_include_http_queueing_overhead",
+    "itl_is_measured_between_content_bearing_sse_events_not_tokenizer_steps",
+    "rss_covers_the_main_backend_process_and_excludes_gpu_memory",
+    "energy_and_quantization_quality_are_not_measured"
+  ]
+}

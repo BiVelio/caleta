@@ -1,0 +1,31 @@
+schema = "caleta.dev/model/v1"
+id = "qwen/qwen2.5-0.5b-instruct:q4_k_m"
+license = "Apache-2.0"
+source = "https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/9217f5db79a29953eb74d5343926648285ec7e67/qwen2.5-0.5b-instruct-q4_k_m.gguf"
+
+[artifact]
+path = "model/qwen2.5-0.5b-instruct-q4_k_m.gguf"
+sha256 = "74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db"
+bytes = 491400032
+
+[backend]
+kind = "llama.cpp"
+executable = "backend/bin/llama-server.exe"
+sha256 = "8bc5ba8c6754aa13b1127a7d2d79d580e53cc5b802aa5c637b193aa001181235"
+args = ["--jinja"]
+
+[runtime]
+context_size = 2048
+gpu_layers = 0
+threads = 4
+
+[metadata]
+publisher = "Qwen"
+model_family = "Qwen2.5"
+parameters = "0.5B"
+quantization = "Q4_K_M"
+model_revision = "9217f5db79a29953eb74d5343926648285ec7e67"
+backend_release = "b11981"
+backend_commit = "da6c30ade8c30930dbf49fe57f9f02d727e99b15"
+backend_archive_sha256 = "626dd4136947fb9cdf755523fefcad3d414858a4beca06ce424fcd3ee0a948c9"
+execution_device = "CPU"

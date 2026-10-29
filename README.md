@@ -8,11 +8,11 @@ Caleta is an open-source trust layer for local AI inference. It verifies model a
 
 It is **not another inference engine**. Caleta does not implement kernels and does not claim to be faster than Uzu, llama.cpp, MLX, Ollama, or mistral.rs. It makes an existing local runtime easier to inspect, reproduce, and expose safely.
 
-> **Project status:** v0.1.0 experimental. Local software validation passes, including 15 unit tests and deterministic end-to-end checks. Real GGUF and hardware validation is still required before treating a deployment as validated. The crates.io name, domains, and trademarks remain subject to owner-side availability checks.
+> **Project status:** v0.1.0 experimental. Local software validation passes, including 15 unit tests and deterministic end-to-end checks. A pinned real-GGUF experiment has also passed on one Windows CPU host. Broader hardware, model, and security validation remains necessary. The crates.io name, domains, and trademarks remain subject to owner-side availability checks.
 
 **New here?** Follow the [complete user guide](docs/user-guide.md). The quick start below is a shorter path for users already familiar with Rust, llama.cpp, and GGUF.
 
-**Research:** read the [technical preprint](paper/caleta.pdf) or its [LaTeX source](paper/caleta.tex), authored by Joan-Marc Fisa (BiVelio Inc). The manuscript is not peer reviewed and distinguishes mock-based software validation from real-model evidence.
+**Research:** read the [technical preprint](paper/caleta.pdf) or its [LaTeX source](paper/caleta.tex), authored by Joan-Marc Fisa (BiVelio Inc). The manuscript is not peer reviewed and distinguishes mock-based software validation from real-model evidence. See the [real-GGUF experiment](experiments/real-gguf-qwen2.5-0.5b/) for the pinned artifacts, methodology, raw reports, and single-host measurements.
 
 ## Why Caleta?
 

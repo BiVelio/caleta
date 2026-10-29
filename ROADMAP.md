@@ -9,7 +9,8 @@ The roadmap prioritizes verifiable capabilities over feature count. Items are pr
 - [x] OpenAI-compatible models/chat proxy with SSE
 - [x] Execution evidence, benchmark JSON, and conformance smoke tests
 - [x] Mock-based unit/E2E tests and publication documentation
-- [ ] Owner-side name/trademark check and real-model release validation
+- [ ] Owner-side name/trademark check
+- [x] Initial pinned real-GGUF validation on Windows CPU
 
 ## v0.2 — stronger provenance and real-world validation
 

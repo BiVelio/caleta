@@ -1,0 +1,23 @@
+{
+  "schema": "caleta.dev/verification/v1",
+  "model": "qwen/qwen2.5-0.5b-instruct:q4_k_m",
+  "artifact": {
+    "path": "\\\\?\\F:\\Papers\\Caleta\\validation\\real-gguf\\model\\qwen2.5-0.5b-instruct-q4_k_m.gguf",
+    "expected_sha256": "74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db",
+    "actual_sha256": "74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db",
+    "expected_bytes": 491400032,
+    "actual_bytes": 491400032,
+    "status": "verified"
+  },
+  "backend": {
+    "path": "\\\\?\\F:\\Papers\\Caleta\\validation\\real-gguf\\backend\\bin\\llama-server.exe",
+    "expected_sha256": "8bc5ba8c6754aa13b1127a7d2d79d580e53cc5b802aa5c637b193aa001181235",
+    "actual_sha256": "8bc5ba8c6754aa13b1127a7d2d79d580e53cc5b802aa5c637b193aa001181235",
+    "expected_bytes": 9216,
+    "actual_bytes": 9216,
+    "status": "verified"
+  },
+  "backend_pinned": true,
+  "verified": true,
+  "authenticity": "integrity_only; trust_requires_a_verified_manifest_source"
+}

@@ -1,0 +1,23 @@
+{
+  "healthy": true,
+  "caleta_version": "0.1.0",
+  "os": "windows",
+  "arch": "x86_64",
+  "checks": [
+    {
+      "name": "manifest",
+      "passed": true,
+      "detail": "valid manifest for qwen/qwen2.5-0.5b-instruct:q4_k_m"
+    },
+    {
+      "name": "artifact_integrity",
+      "passed": true,
+      "detail": "model artifact matches its declared size and SHA-256"
+    },
+    {
+      "name": "backend",
+      "passed": true,
+      "detail": "\\\\?\\F:\\Papers\\Caleta\\validation\\real-gguf\\backend\\bin\\llama-server.exe: version: 0.8.0-dev (build 11981, commit da6c30ade)\r\nbuilt with Clang 20.1.8 for Windows x86_64"
+    }
+  ]
+}

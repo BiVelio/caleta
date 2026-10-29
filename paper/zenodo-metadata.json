@@ -3,7 +3,7 @@
     "title": "Caleta: An Evidence-Oriented Trust Layer for Reproducible Local Large Language Model Inference",
     "upload_type": "publication",
     "publication_type": "preprint",
-    "description": "Local large language model (LLM) inference is frequently described as private, verified, or reproducible without separating the technical claims behind those terms. A local deployment can still execute an unintended artifact, inherit unsafe configuration, expose unnecessary API routes, or publish aggregate performance results that omit failed runs and methodological differences. This paper presents Caleta, an Apache-2.0 process supervisor and evidence layer around llama.cpp rather than a new inference engine. Caleta combines versioned model manifests, exact-size and SHA-256 verification, controlled backend construction, a restricted OpenAI-compatible proxy, prompt-free execution records, reproducible benchmark reports, and a small conformance suite. Its research contribution is the composition of these mechanisms into explicit, machine-readable contracts that distinguish integrity from authenticated provenance and privacy controls from operating-system isolation. We evaluate the reference implementation through strict static checks, fifteen unit tests, and a deterministic end-to-end experiment covering verification, process supervision, authentication, model listing, server-sent events, conformance, and benchmarking. The experiment validates software behavior, not model accuracy, inference throughput, or llama.cpp compatibility with real GGUF artifacts. We therefore present no real-model performance claim. The resulting design offers a reproducible foundation for studying trustworthy local inference while making the remaining threats--unsigned manifests, time-of-check/time-of-use replacement, lack of TLS and OS-enforced egress isolation, and incomplete API conformance--explicit subjects for future work.",
+    "description": "Local large language model (LLM) inference is often described as private, verified, or reproducible without separating the technical claims behind those terms. This paper presents Caleta, an Apache-2.0 process supervisor and evidence layer around llama.cpp rather than a new inference engine. Caleta combines versioned manifests, exact-size and SHA-256 verification, controlled backend construction, a restricted OpenAI-compatible proxy, prompt-free execution records, benchmark reports, and a small conformance suite. Its contribution is the composition of these mechanisms into explicit contracts that distinguish integrity from authenticated provenance and privacy controls from operating-system isolation. We evaluate the implementation through static checks, fifteen unit tests, deterministic end-to-end tests on Ubuntu, macOS, and Windows, and a pinned real-model experiment on Windows CPU using Qwen2.5-0.5B-Instruct Q4_K_M and llama.cpp b11981. The real experiment validates artifact verification, startup, model listing, non-streaming and server-sent-event chat, and conformance. Three independent benchmark invocations produced fifteen successful warm requests with no failures. In this single configuration, median time to first token was 18.066 ms and median decode throughput was 54.394 tokens/s. These descriptive measurements do not establish cross-engine superiority, output quality, energy efficiency, or hardware-general performance. Raw JSON, commands, and environment metadata are published. Remaining challenges include signed manifests, time-of-check/time-of-use replacement, operating-system containment, proxy-overhead measurement, and broader experimental matrices.",
     "creators": [
       {
         "name": "Fisa, Joan-Marc",
@@ -31,9 +31,14 @@
         "identifier": "https://github.com/BiVelio/caleta/actions/runs/40758287817",
         "relation": "isSupplementedBy",
         "resource_type": "other"
+      },
+      {
+        "identifier": "https://github.com/BiVelio/caleta/tree/main/experiments/real-gguf-qwen2.5-0.5b",
+        "relation": "isSupplementedBy",
+        "resource_type": "dataset"
       }
     ],
-    "notes": "Non-peer-reviewed technical preprint. Corresponding author: Joan-Marc Fisa (jmfisa@bivelio.com). Copyright 2026 BiVelio Inc. The software is licensed separately under Apache-2.0. Zenodo DOI: 10.5281/zenodo.23761755.",
-    "version": "v1.0-preprint"
+    "notes": "Non-peer-reviewed technical preprint. Corresponding author: Joan-Marc Fisa (jmfisa@bivelio.com). Copyright 2026 BiVelio Inc. The software is licensed separately under Apache-2.0. Earlier manuscript version DOI: 10.5281/zenodo.23761755.",
+    "version": "v1.1-preprint"
   }
 }
