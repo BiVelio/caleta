@@ -19,7 +19,7 @@ Use the same scholarly version and metadata on arXiv, Zenodo, and SSRN. Do not c
 - **Code and artifacts:** https://github.com/BiVelio/caleta
 - **Validation evidence:** https://github.com/BiVelio/caleta/actions/runs/40758287817
 - **Zenodo v1.0:** published 29 October 2026 at https://zenodo.org/records/23761755 — DOI 10.5281/zenodo.23761755.
-- **Zenodo v1.1:** draft 23763881 with reserved DOI 10.5281/zenodo.23763881; not registered until publication.
+- **Zenodo v1.1:** published 29 October 2026 at https://zenodo.org/records/23763881 — DOI 10.5281/zenodo.23763881; resolution and downloaded PDF checksum verified.
 - **Zenodo all-versions DOI:** 10.5281/zenodo.23761754
 
 ## arXiv
