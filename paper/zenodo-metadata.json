@@ -38,7 +38,7 @@
         "resource_type": "dataset"
       }
     ],
-    "notes": "Non-peer-reviewed technical preprint. Corresponding author: Joan-Marc Fisa (jmfisa@bivelio.com). Copyright 2026 BiVelio Inc. The software is licensed separately under Apache-2.0. Earlier manuscript version DOI: 10.5281/zenodo.23761755.",
+    "notes": "Non-peer-reviewed technical preprint. Corresponding author: Joan-Marc Fisa (jmfisa@bivelio.com). Copyright 2026 BiVelio Inc. The software is licensed separately under Apache-2.0. This version DOI: 10.5281/zenodo.23763881. Earlier version DOI: 10.5281/zenodo.23761755.",
     "version": "v1.1-preprint"
   }
 }
