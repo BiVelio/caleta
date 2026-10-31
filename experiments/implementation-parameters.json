@@ -3,13 +3,16 @@
  "internal_api_key_bytes": 32,
  "max_request_mib": 16,
  "minimum_public_key_characters": 16,
+ "request_timeout_seconds": 120,
+ "max_concurrent_requests": 32,
+ "backend_version_timeout_seconds": 10,
  "rss_sample_ms": 50,
  "verification_buffer_mib": 1,
  "minimum_rust_version": 1.88,
  "provenance": {
   "schema": "https://github.com/ASSERT-KTH/assert-research-agent/blob/main/schemas/provenance-v1.json",
   "command": [
-   "python3",
+   "python",
    "tests/collect_parameters.py"
   ],
   "cwd": ".",
@@ -23,8 +26,8 @@
     "sha256": "54cc3d27d879f4f94ead05638f02565b400e0d28023dd2a9b628b8817776d0d6"
    }
   ],
-  "commit": "a1ea8020f1d62dd07b6f5e549c9a428b2e026338",
-  "now": "2026-10-31T00:00:00Z",
+  "commit": "8953e90b46fd0b4fc87240232187dd392c5187a6",
+  "now": "2026-10-31T15:35:58Z",
   "osaudit": "0.7.0"
  }
 }
