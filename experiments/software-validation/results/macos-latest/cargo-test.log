@@ -1,0 +1,46 @@
+[1m[92m Downloading[0m crates ...
+[1m[92m  Downloaded[0m fastrand v2.5.0
+[1m[92m  Downloaded[0m rustix v1.1.6
+[1m[92m  Downloaded[0m tempfile v3.27.0
+[1m[92m   Compiling[0m bitflags v2.13.2
+[1m[92m   Compiling[0m rustix v1.1.6
+[1m[92m   Compiling[0m getrandom v0.4.3
+[1m[92m   Compiling[0m tower-http v0.6.11
+[1m[92m   Compiling[0m fastrand v2.5.0
+[1m[92m   Compiling[0m reqwest v0.12.28
+[1m[92m   Compiling[0m tempfile v3.27.0
+[1m[92m   Compiling[0m caleta v0.1.0 (/Users/runner/work/caleta/caleta)
+[1m[92m    Finished[0m `test` profile [unoptimized + debuginfo] target(s) in 7.96s
+[1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/caleta-7c0ae235260e3e30)
+
+running 15 tests
+test bench::tests::computes_percentiles ... ok
+test bench::tests::ignores_done ... ok
+test bench::tests::parses_content_and_usage ... ok
+test manifest::tests::rejects_agent_tools ... ok
+test manifest::tests::accepts_minimal_manifest ... ok
+test manifest::tests::rejects_network_override ... ok
+test manifest::tests::rejects_short_digest ... ok
+test manifest::tests::rejects_unpinned_backend_digest ... ok
+test server::tests::non_loopback_requires_key ... ok
+test server::tests::rejects_missing_public_credentials ... ok
+test server::tests::forwards_models_with_internal_credentials ... ok
+test server::tests::preserves_sse_stream ... ok
+test verify::tests::reports_missing_file ... ok
+test verify::tests::detects_modified_content ... ok
+test verify::tests::verifies_content_and_size ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+[1m[92m     Running[0m unittests src/main.rs (target/debug/deps/caleta-b7cc955d3a41cf77)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[1m[92m   Doc-tests[0m caleta
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
