@@ -1,53 +1,73 @@
 {
-  "schema": "caleta.dev/validation-environment/v1",
-  "executed_at_utc": "2026-10-29T11:11:15Z/2026-10-29T11:13:06.615961200Z",
-  "caleta_version": "0.1.0",
-  "caleta_source_revision": "539ed3e",
-  "rust_version": "1.94.1",
-  "cargo_version": "1.94.1",
-  "python_version_for_metadata": "3.14.0",
-  "host": {
-    "manufacturer": "MSI",
-    "model": "MS-7A78",
-    "os": "Microsoft Windows 10 Home",
-    "os_version": "10.0.19045",
-    "architecture": "x86_64",
-    "cpu": "Intel Core i7-7700K CPU @ 4.20GHz",
-    "physical_cores": 4,
-    "logical_processors": 8,
-    "ram_gib": 15.96,
-    "gpu_present": "NVIDIA GeForce GTX 1080",
-    "gpu_used": false,
-    "power_state_and_thermal_state": "not_measured",
-    "concurrent_system_load": "not_controlled"
-  },
-  "backend": {
-    "kind": "llama.cpp",
-    "release": "b11981",
-    "commit": "da6c30ade8c30930dbf49fe57f9f02d727e99b15",
-    "reported_version": "0.8.0-dev (build 11981, commit da6c30ade), Clang 20.1.8 for Windows x86_64",
-    "asset": "llama-b11981-bin-win-cpu-x64.zip",
-    "asset_sha256": "626dd4136947fb9cdf755523fefcad3d414858a4beca06ce424fcd3ee0a948c9",
-    "executable_sha256": "8bc5ba8c6754aa13b1127a7d2d79d580e53cc5b802aa5c637b193aa001181235"
-  },
-  "model": {
-    "publisher": "Qwen",
-    "repository": "Qwen/Qwen2.5-0.5B-Instruct-GGUF",
-    "revision": "9217f5db79a29953eb74d5343926648285ec7e67",
-    "file": "qwen2.5-0.5b-instruct-q4_k_m.gguf",
-    "license": "Apache-2.0",
-    "bytes": 491400032,
-    "sha256": "74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db",
-    "quantization": "Q4_K_M"
-  },
-  "runtime": {
-    "device": "CPU",
-    "context_size": 2048,
-    "gpu_layers": 0,
-    "threads": 4,
-    "extra_backend_args": ["--jinja"],
-    "max_tokens": 64,
-    "seed": 42,
-    "temperature": 0
-  }
+ "schema": "caleta.dev/validation-environment/v1",
+ "executed_at_utc": "2026-10-29T11:11:15Z/2026-10-29T11:13:06.615961200Z",
+ "caleta_version": "0.1.0",
+ "caleta_source_revision": "539ed3e",
+ "rust_version": "1.94.1",
+ "cargo_version": "1.94.1",
+ "python_version_for_metadata": "3.14.0",
+ "host": {
+  "manufacturer": "MSI",
+  "model": "MS-7A78",
+  "os": "Microsoft Windows 10 Home",
+  "os_version": "10.0.19045",
+  "architecture": "x86_64",
+  "cpu": "Intel Core i7-7700K CPU @ 4.20GHz",
+  "physical_cores": 4,
+  "logical_processors": 8,
+  "ram_gib": 15.96,
+  "gpu_present": "NVIDIA GeForce GTX 1080",
+  "gpu_used": false,
+  "power_state_and_thermal_state": "not_measured",
+  "concurrent_system_load": "not_controlled"
+ },
+ "backend": {
+  "kind": "llama.cpp",
+  "release": "b11981",
+  "commit": "da6c30ade8c30930dbf49fe57f9f02d727e99b15",
+  "reported_version": "0.8.0-dev (build 11981, commit da6c30ade), Clang 20.1.8 for Windows x86_64",
+  "asset": "llama-b11981-bin-win-cpu-x64.zip",
+  "asset_sha256": "626dd4136947fb9cdf755523fefcad3d414858a4beca06ce424fcd3ee0a948c9",
+  "executable_sha256": "8bc5ba8c6754aa13b1127a7d2d79d580e53cc5b802aa5c637b193aa001181235"
+ },
+ "model": {
+  "publisher": "Qwen",
+  "repository": "Qwen/Qwen2.5-0.5B-Instruct-GGUF",
+  "revision": "9217f5db79a29953eb74d5343926648285ec7e67",
+  "file": "qwen2.5-0.5b-instruct-q4_k_m.gguf",
+  "license": "Apache-2.0",
+  "bytes": 491400032,
+  "sha256": "74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db",
+  "quantization": "Q4_K_M"
+ },
+ "runtime": {
+  "device": "CPU",
+  "context_size": 2048,
+  "gpu_layers": 0,
+  "threads": 4,
+  "extra_backend_args": [
+   "--jinja"
+  ],
+  "max_tokens": 64,
+  "seed": 42,
+  "temperature": 0
+ },
+ "provenance": {
+  "schema": "https://github.com/ASSERT-KTH/assert-research-agent/blob/main/schemas/provenance-v1.json",
+  "command": [
+   "python3",
+   "tests/repeat_json.py",
+   "experiments/real-gguf-qwen2.5-0.5b/results/environment.json"
+  ],
+  "cwd": ".",
+  "inputs": [
+   {
+    "path": "experiments/real-gguf-qwen2.5-0.5b/results/environment.json",
+    "sha256": "d15571600339b635f0f7e91f6b5fb9b83757dd0b2e997fb6a76b52e3504b357e"
+   }
+  ],
+  "commit": "d40ebaf78391bd00673ddcf0b4d899165c9523f6",
+  "now": "2026-10-29T11:11:15Z",
+  "osaudit": "0.7.0"
+ }
 }
