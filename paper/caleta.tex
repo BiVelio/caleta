@@ -60,7 +60,7 @@ Earlier-version Zenodo DOI: \href{https://doi.org/10.5281/zenodo.23763881}{10.52
 \end{center}
 
 \begin{abstract}
-Local large language model (LLM) inference is often described as private, verified, or reproducible without separating the technical claims behind those terms. This paper presents \textbf{Caleta}, an Apache-2.0 process supervisor and evidence layer around llama.cpp rather than a new inference engine. Caleta combines versioned manifests, exact-size and SHA-256 verification, controlled backend construction, a restricted OpenAI-compatible proxy, prompt-free execution records, benchmark reports, and a small conformance suite. Its contribution is the composition of these mechanisms into explicit contracts that distinguish integrity from authenticated provenance and privacy controls from operating-system isolation. We evaluate the implementation through static checks, \artifact{experiments/software-validation/results/table1-software-validation.json}{fifteen unit tests}, deterministic end-to-end tests on Ubuntu, macOS, and Windows, and a pinned real-model experiment on Windows CPU using Qwen2.5-0.5B-Instruct Q4\_K\_M and llama.cpp b11981. The real experiment validates artifact verification, startup, model listing, non-streaming and server-sent-event chat, and conformance. Three independent benchmark invocations produced fifteen successful warm requests with no failures. In this single configuration, median time to first token was 18.066 ms and median decode throughput was 54.394 tokens/s. These descriptive measurements do not establish cross-engine superiority, output quality, energy efficiency, or hardware-general performance. Raw JSON, commands, and environment metadata are published. Remaining challenges include signed manifests, time-of-check/time-of-use replacement, operating-system containment, proxy-overhead measurement, and broader experimental matrices.
+Local large language model (LLM) inference is often described as private, verified, or reproducible without separating the technical claims behind those terms. This paper presents \textbf{Caleta}, an Apache-2.0 process supervisor and evidence layer around llama.cpp rather than a new inference engine. Caleta combines versioned manifests, exact-size and SHA-256 verification, controlled backend construction, a restricted OpenAI-compatible proxy, prompt-free execution records, benchmark reports, and a small conformance suite. Its contribution is the composition of these mechanisms into explicit contracts that distinguish integrity from authenticated provenance and privacy controls from operating-system isolation. We evaluate the implementation through static checks, \artifact{experiments/software-validation/results/table1-software-validation.json}{fifteen unit tests}, deterministic end-to-end tests on Ubuntu, macOS, and Windows, and a pinned real-model experiment on Windows CPU using Qwen2.5-0.5B-Instruct Q4\_K\_M and llama.cpp b11981. The real experiment validates artifact verification, startup, model listing, non-streaming and server-sent-event chat, and conformance. Three independent benchmark invocations produced fifteen successful warm requests with no failures. In this single configuration, median time to first token was \artifact{experiments/real-gguf-qwen2.5-0.5b/results/summary.json}{18.066 ms} and median decode throughput was \artifact{experiments/real-gguf-qwen2.5-0.5b/results/summary.json}{54.394 tokens/s}. These descriptive measurements do not establish cross-engine superiority, output quality, energy efficiency, or hardware-general performance. Raw JSON, commands, and environment metadata are published. Remaining challenges include signed manifests, time-of-check/time-of-use replacement, operating-system containment, proxy-overhead measurement, and broader experimental matrices.
 \end{abstract}
 
 \noindent\textbf{Keywords:} local inference; large language models; reproducibility; software supply chain; privacy engineering; benchmarking; provenance; llama.cpp.
@@ -275,7 +275,7 @@ Check & Observed result & Supported interpretation \\
 \midrule
 Formatting & Pass & Source conforms to Rust formatting. \\
 Clippy, all targets & Pass with warnings denied & No emitted lint warnings under the configured toolchain. \\
-Unit tests & 15 passed, 0 failed & Tested manifest, digest, SSE, percentile, authentication, proxy, and exposure cases behave as expected. \\
+Unit tests & \artifact{experiments/software-validation/results/windows-latest/unit_tests.json}{15 passed, 0 failed} & Tested manifest, digest, SSE, percentile, authentication, proxy, and exposure cases behave as expected. \\
 Locked build & Pass & Package builds with the committed dependency resolution. \\
 Verification E2E & Pass & Exact size/digest and pinned mock backend are accepted by the workflow. \\
 Serve/authentication E2E & Pass & Supervised proxy starts; missing public credentials are rejected; authorized models and chat requests succeed. \\
@@ -284,19 +284,19 @@ Benchmark E2E & 2 successful runs & Raw successful-run records and model digest 
 Mock-based inference claims & Not made & The fixture validates orchestration only; real-model evidence is reported separately below. \\
 \bottomrule
 \end{tabular}
-\caption{Local software-validation outcomes and their bounded interpretation.}
+\caption{\artifact{experiments/software-validation/results/table1-software-validation.json}{Local software-validation outcomes and their bounded interpretation.}}
 \label{tab:results}
 \end{table}
 
 \subsection{Hosted multi-platform confirmation}
 
-After the local validation, GitHub Actions run \href{https://github.com/BiVelio/caleta/actions/runs/40758287817}{40758287817} completed successfully at source revision \texttt{d898dad904ccabbff5af40dd5906e98fd0ee6369}. The Ubuntu, macOS, and Windows test jobs passed, as did the separate formatting and Clippy job. The Ubuntu and macOS end-to-end runs included graceful-shutdown execution records; the Windows run used forced mock-process shutdown. This confirms the same mock-based contracts across the three hosted operating systems, but it does not add real-model evidence.
+After the local validation, GitHub Actions run \href{https://github.com/BiVelio/caleta/actions/runs/41198343615}{41198343615} completed successfully at source revision \texttt{74183995aac0a87f61598ab755d0f72f6358aae7}. The Ubuntu, macOS, and Windows test jobs passed, as did the separate formatting and Clippy job. The Ubuntu and macOS end-to-end runs included graceful-shutdown execution records; the Windows run used forced mock-process shutdown. The \artifact{experiments/software-validation/results/table1-software-validation.json}{committed JSON and logs} preserve all three runner results, including the 45-byte mock artifact and the 15 passing unit tests. This confirms the same mock-based contracts across the three hosted operating systems, but it does not add real-model evidence.
 
 No tokens-per-second result from the mock is scientifically meaningful. Mock timing is intentionally excluded from the performance claims.
 
 \subsection{Real-model procedure}
 
-The real experiment used Qwen2.5-0.5B-Instruct Q4\_K\_M under Apache-2.0, pinned at Hugging Face revision \texttt{9217f5db79a2} \cite{qwenmodel}. The artifact has 491,400,032 bytes and this publisher-declared SHA-256:
+The real experiment used Qwen2.5-0.5B-Instruct Q4\_K\_M under Apache-2.0, pinned at Hugging Face revision \texttt{9217f5db79a2} \cite{qwenmodel}. The artifact has \artifact{experiments/real-gguf-qwen2.5-0.5b/results/environment.json}{491,400,032 bytes} and this publisher-declared SHA-256:
 \begin{lstlisting}
 74a4da8c9fdbcd15bd1f6d01d621410d31c6fc00986f5eb687824e7b93d7a9db
 \end{lstlisting}
@@ -317,23 +317,27 @@ Verification passed for the real model and backend. Model listing, non-streaming
 \toprule
 Metric & Observed value & Scope \\
 \midrule
-Independent cold starts & 3 & One per benchmark invocation \\
-Measured warm requests & 15 & Five per invocation; zero failures \\
-Cold start, median & 835.371 ms & Range 660.720--977.129 ms \\
-TTFT, median & 18.066 ms & Range 14.574--28.004 ms \\
-Decode throughput, median & 54.394 tokens/s & Range 49.028--68.138 tokens/s \\
-Decode sample standard deviation & 6.617 tokens/s & Descriptive; not a confidence interval \\
+Independent cold starts & \artifact{experiments/real-gguf-qwen2.5-0.5b/results/summary.json}{3} & One per benchmark invocation \\
+Measured warm requests & \artifact{experiments/real-gguf-qwen2.5-0.5b/results/summary.json}{15} & Five per invocation; zero failures \\
+Cold start, median & \artifact{experiments/real-gguf-qwen2.5-0.5b/results/summary.json}{835.371 ms} & Range \artifact{experiments/real-gguf-qwen2.5-0.5b/results/summary.json}{660.720--977.129 ms} \\
+TTFT, median & \artifact{experiments/real-gguf-qwen2.5-0.5b/results/summary.json}{18.066 ms} & Range \artifact{experiments/real-gguf-qwen2.5-0.5b/results/summary.json}{14.574--28.004 ms} \\
+Decode throughput, median & \artifact{experiments/real-gguf-qwen2.5-0.5b/results/summary.json}{54.394 tokens/s} & Range \artifact{experiments/real-gguf-qwen2.5-0.5b/results/summary.json}{49.028--68.138 tokens/s} \\
+Decode sample standard deviation & \artifact{experiments/real-gguf-qwen2.5-0.5b/results/summary.json}{6.617 tokens/s} & Descriptive; not a confidence interval \\
 \bottomrule
 \end{tabular}
-\caption{Single-host real-model measurements. They are not cross-engine or hardware-general claims.}
+\caption{\artifact{experiments/real-gguf-qwen2.5-0.5b/scripts/aggregate_results.py}{Single-host real-model measurements. They are not cross-engine or hardware-general claims.}}
 \label{tab:realmetrics}
 \end{table}
 
 Repeated prompts within each backend process may benefit from caching. TTFT includes HTTP and queueing, and observed prefill values are not cold kernel measurements. The experiment does not estimate public-proxy overhead because Caleta's benchmark talks directly to its supervised backend. It also does not measure energy, memory, output quality, safety, or thermal behavior. Retained chat responses provide protocol evidence, not an exact-instruction-following evaluation.
 
-The manifest, commands, environment record, raw JSON reports, SSE session, and aggregate summary are publicly available in the \href{https://github.com/BiVelio/caleta/tree/main/experiments/real-gguf-qwen2.5-0.5b}{real-GGUF experiment directory}. No model or backend binary is redistributed there.
+The manifest, commands, environment record, raw JSON reports, SSE session, and aggregate summary are publicly available in the \artifact{experiments/real-gguf-qwen2.5-0.5b/README.md}{real-GGUF experiment directory}. No model or backend binary is redistributed there.
 
 For RQ1, the real experiment confirms that the manifest, verification, supervision, and proxy operate with a pinned GGUF and llama.cpp build, complementing the deterministic tests. For RQ2, the experiment provides raw operational and benchmark evidence without private prompts; hosted Unix runs separately validate prompt-free execution records. For RQ3, the two layers demonstrate why protocol determinism and real-model validation are complementary rather than interchangeable evidence.
+
+\subsection{Artifact traceability}
+
+Every empirical claim in this evaluation is backed by a committed data file or a committed script. Table~\ref{tab:results} is aggregated by \artifact{tests/aggregate_validation.py}{tests/aggregate\_validation.py} from preserved runner outputs, while Table~\ref{tab:realmetrics} is regenerated by \artifact{experiments/real-gguf-qwen2.5-0.5b/scripts/aggregate_results.py}{aggregate\_results.py --check} from the three raw benchmark reports. The \artifact{osaudit.toml}{osaudit configuration} links the paper to these results and instruments, and returns no findings at the evidence tag. This audit establishes mechanical traceability, not independent scientific correctness, external replication, or peer review.
 
 \section{Security and Privacy Analysis}
 
