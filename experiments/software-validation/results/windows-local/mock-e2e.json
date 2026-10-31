@@ -1,0 +1,25 @@
+{
+  "schema": "caleta.dev/mock-e2e/v1",
+  "os": "windows",
+  "arch": "amd64",
+  "passed": true,
+  "artifact": {
+    "bytes": 45,
+    "sha256": "f171a9b8d02e43267e514cbdb1ee04745f3a437dd04382ca04ccf777e9958e7f"
+  },
+  "benchmark": {
+    "successful_runs": 2,
+    "failed_runs": 0
+  },
+  "shutdown": "forced",
+  "execution_record_validated": false,
+  "checks": [
+    "verify",
+    "serve",
+    "auth",
+    "models",
+    "sse",
+    "conformance",
+    "bench"
+  ]
+}

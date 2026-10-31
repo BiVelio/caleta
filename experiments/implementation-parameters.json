@@ -1,0 +1,30 @@
+{
+ "schema": "caleta.dev/implementation-parameters/v1",
+ "internal_api_key_bytes": 32,
+ "max_request_mib": 16,
+ "minimum_public_key_characters": 16,
+ "rss_sample_ms": 50,
+ "verification_buffer_mib": 1,
+ "minimum_rust_version": 1.88,
+ "provenance": {
+  "schema": "https://github.com/ASSERT-KTH/assert-research-agent/blob/main/schemas/provenance-v1.json",
+  "command": [
+   "python3",
+   "tests/collect_parameters.py"
+  ],
+  "cwd": ".",
+  "inputs": [
+   {
+    "path": "src",
+    "sha256": "985f72ca4bad13bb88385c7d8b16c3293f13e194ca730f316e8e86d1c7439134"
+   },
+   {
+    "path": "Cargo.toml",
+    "sha256": "fddd47c8295202e43b1a325d6a5fe38488619b83a58c53f4bc0c41e6fda092ee"
+   }
+  ],
+  "commit": "ca72e22381e5358154faf87a2bd437bec4c50d2b",
+  "now": "2026-10-31T00:00:00Z",
+  "osaudit": "0.7.0"
+ }
+}

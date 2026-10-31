@@ -1,0 +1,114 @@
+schema = "https://github.com/ASSERT-KTH/assert-research-agent/blob/main/schemas/audit-v1.json"
+
+[paper]
+tex = ["paper/caleta.tex"]
+
+[results]
+files = [
+  "experiments/real-gguf-qwen2.5-0.5b/results/summary.json",
+  "experiments/real-gguf-qwen2.5-0.5b/results/environment.json",
+  "experiments/software-validation/results/table1-software-validation.json",
+  "experiments/implementation-parameters.json",
+]
+instruments = [
+  "experiments/real-gguf-qwen2.5-0.5b/scripts/aggregate_results.py",
+  "tests/aggregate_validation.py",
+  "tests/collect_parameters.py",
+]
+
+[[numbers.allow]]
+value = "2026"
+reason = "publication and access dates"
+
+[[numbers.allow]]
+value = "4.0"
+reason = "CC BY 4.0 license identifier"
+
+[[numbers.allow]]
+value = "10.5281"
+reason = "Zenodo DOI prefix"
+
+[[numbers.allow]]
+value = "256"
+reason = "SHA-256 algorithm identifier"
+
+[[numbers.allow]]
+value = "41198343615"
+reason = "public GitHub Actions validation run identifier"
+url = "https://github.com/BiVelio/caleta/actions/runs/41198343615"
+
+[[numbers.allow]]
+value = "10"
+reason = "Windows 10 operating-system major version"
+
+[[numbers.allow]]
+value = "180"
+reason = "FIPS 180-4 secure hash standard identifier"
+
+[[numbers.allow]]
+value = "4"
+reason = "FIPS 180-4 standard edition"
+
+[[numbers.allow]]
+value = "2015"
+reason = "NIST standard publication year"
+
+[[numbers.allow]]
+value = "2607.00501"
+reason = "BaseRT arXiv identifier"
+
+[[numbers.allow]]
+value = "1644"
+reason = "AAAI bibliography first page"
+
+[[numbers.allow]]
+value = "1651"
+reason = "AAAI bibliography last page"
+
+[[numbers.allow]]
+value = "2018"
+reason = "bibliographic publication year"
+
+[[numbers.allow]]
+value = "2019"
+reason = "bibliographic publication year"
+
+[[numbers.allow]]
+value = "2021"
+reason = "bibliographic publication year"
+
+[[numbers.allow]]
+value = "164"
+reason = "JMLR article number"
+
+[[numbers.allow]]
+value = "20"
+reason = "JMLR page range end"
+
+[[numbers.allow]]
+value = "22"
+reason = "JMLR volume number"
+
+[[numbers.allow]]
+value = "229"
+reason = "Model Cards bibliography page range end"
+
+[[numbers.allow]]
+value = "12"
+reason = "Datasheets issue number"
+
+[[numbers.allow]]
+value = "86"
+reason = "Datasheets first page"
+
+[[numbers.allow]]
+value = "92"
+reason = "Datasheets last page"
+
+[[numbers.allow]]
+value = "28"
+reason = "bibliographic access day"
+
+[[numbers.allow]]
+value = "29"
+reason = "bibliographic access day"

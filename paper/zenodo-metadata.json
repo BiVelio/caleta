@@ -28,17 +28,17 @@
         "resource_type": "software"
       },
       {
-        "identifier": "https://github.com/BiVelio/caleta/actions/runs/40758287817",
+        "identifier": "https://github.com/BiVelio/caleta/actions/runs/41198343615",
         "relation": "isSupplementedBy",
         "resource_type": "other"
       },
       {
-        "identifier": "https://github.com/BiVelio/caleta/tree/main/experiments/real-gguf-qwen2.5-0.5b",
+        "identifier": "https://github.com/BiVelio/caleta/tree/evidence-v1.0/experiments/real-gguf-qwen2.5-0.5b",
         "relation": "isSupplementedBy",
         "resource_type": "dataset"
       }
     ],
-    "notes": "Non-peer-reviewed technical preprint. Corresponding author: Joan-Marc Fisa (jmfisa@bivelio.com). Copyright 2026 BiVelio Inc. The software is licensed separately under Apache-2.0. This version DOI: 10.5281/zenodo.23763881. Earlier version DOI: 10.5281/zenodo.23761755.",
-    "version": "v1.1-preprint"
+    "notes": "Non-peer-reviewed technical preprint. Corresponding author: Joan-Marc Fisa (jmfisa@bivelio.com). Copyright 2026 BiVelio Inc. The software is licensed separately under Apache-2.0. This version DOI: 10.5281/zenodo.23836099. Earlier version DOI: 10.5281/zenodo.23763881. All 20 empirical claims are traceable to committed data or scripts; osaudit returns no findings.",
+    "version": "v1.2-preprint"
   }
 }
