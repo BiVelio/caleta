@@ -55,7 +55,7 @@
  "provenance": {
   "schema": "https://github.com/ASSERT-KTH/assert-research-agent/blob/main/schemas/provenance-v1.json",
   "command": [
-   "python3",
+   "python",
    "tests/repeat_json.py",
    "experiments/real-gguf-qwen2.5-0.5b/results/environment-source.json"
   ],
@@ -66,8 +66,8 @@
     "sha256": "d3e743a3f0d7ff3c0d8ec01971880aed7812fb2f1e743351375baad4c0c4b57f"
    }
   ],
-  "commit": "8b3f5bedfba21ff231ab5272b488b709483b71bc",
-  "now": "2026-10-29T11:11:15Z",
+  "commit": "1354c631f91f7f6432be50aa48a48b651607aedd",
+  "now": "2026-10-31T15:37:09Z",
   "osaudit": "0.7.0"
  }
 }
