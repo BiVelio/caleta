@@ -10,32 +10,32 @@
 [1m[92m   Compiling[0m reqwest v0.12.28
 [1m[92m   Compiling[0m tempfile v3.27.0
 [1m[92m   Compiling[0m caleta v0.1.0 (/Users/runner/work/caleta/caleta)
-[1m[92m    Finished[0m `test` profile [unoptimized + debuginfo] target(s) in 6.59s
+[1m[92m    Finished[0m `test` profile [unoptimized + debuginfo] target(s) in 6.71s
 [1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/caleta-d9bb73671e6aca82)
 
 running 22 tests
 test bench::tests::computes_percentiles ... ok
-test bench::tests::ignores_done ... ok
 test conformance::tests::accepts_structural_sse ... ok
+test bench::tests::ignores_done ... ok
 test bench::tests::parses_content_and_usage ... ok
-test conformance::tests::rejects_invalid_json_event ... ok
 test conformance::tests::rejects_text_that_only_looks_like_sse ... ok
 test conformance::tests::omits_unexpected_response_bodies ... ok
-test manifest::tests::accepts_minimal_manifest ... ok
+test conformance::tests::rejects_invalid_json_event ... ok
 test manifest::tests::rejects_agent_tools ... ok
-test manifest::tests::rejects_network_override ... ok
 test manifest::tests::rejects_short_digest ... ok
 test manifest::tests::rejects_unpinned_backend_digest ... ok
+test manifest::tests::accepts_minimal_manifest ... ok
+test manifest::tests::rejects_network_override ... ok
 test server::tests::loopback_requires_key_by_default ... ok
 test server::tests::non_loopback_requires_key ... ok
 test server::tests::health_reports_backend_failure ... ok
 test server::tests::rejects_missing_public_credentials ... ok
 test server::tests::rejects_non_json_and_hostile_loopback_requests ... ok
-test server::tests::preserves_sse_stream ... ok
+test verify::tests::detects_modified_content ... ok
 test server::tests::forwards_models_with_internal_credentials ... ok
 test verify::tests::reports_missing_file ... ok
+test server::tests::preserves_sse_stream ... ok
 test verify::tests::verifies_content_and_size ... ok
-test verify::tests::detects_modified_content ... ok
 
 test result: ok. 22 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
