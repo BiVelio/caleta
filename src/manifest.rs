@@ -28,6 +28,12 @@ pub struct Artifact {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BackendDependency {
+    pub path: PathBuf,
+    pub sha256: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BackendSpec {
     #[serde(default = "llama_backend")]
     pub kind: String,
@@ -37,6 +43,8 @@ pub struct BackendSpec {
     /// cannot be pinned reliably and is therefore rejected when this is set.
     #[serde(default)]
     pub sha256: Option<String>,
+    #[serde(default)]
+    pub dependencies: Vec<BackendDependency>,
     /// Additional llama-server flags. Flags that conflict with Caleta's
     /// process/network boundary are rejected during validation.
     #[serde(default)]
@@ -167,6 +175,19 @@ impl ModelManifest {
             validate_digest(digest)?;
             if is_program_name(&self.backend.executable) {
                 bail!("backend.sha256 requires an explicit executable path, not a PATH lookup");
+            }
+        }
+        for dependency in &self.backend.dependencies {
+            validate_digest(&dependency.sha256)?;
+            if dependency.path.is_absolute()
+                || dependency.path.components().any(|component| {
+                    matches!(
+                        component,
+                        Component::ParentDir | Component::RootDir | Component::Prefix(_)
+                    )
+                })
+            {
+                bail!("backend dependency paths must stay inside the backend directory");
             }
         }
         if self.runtime.context_size == 0 {

@@ -1,9 +1,9 @@
 {
  "schema": "caleta.dev/software-validation-summary/v1",
  "unit_tests": {
-  "passed": 15,
+  "passed": 22,
   "failed": 0,
-  "source": "experiments\\software-validation\\results\\windows-latest\\unit_tests.json"
+  "source": "experiments/software-validation/results/windows-latest/unit_tests.json"
  },
  "mock_e2e": {
   "successful_runs": 2,
@@ -24,7 +24,7 @@
  "provenance": {
   "schema": "https://github.com/ASSERT-KTH/assert-research-agent/blob/main/schemas/provenance-v1.json",
   "command": [
-   "python3",
+   "python",
    "tests/aggregate_validation.py",
    "experiments/software-validation/results/ubuntu-latest",
    "experiments/software-validation/results/macos-latest",
@@ -34,25 +34,27 @@
    "--local-dir",
    "experiments/software-validation/results/windows-latest",
    "--output",
-   "experiments/software-validation/results/table1-software-validation.json"
+   "experiments/software-validation/results/table1-software-validation.json",
+   "--expected-unit-tests",
+   "22"
   ],
   "cwd": ".",
   "inputs": [
    {
     "path": "experiments/software-validation/results/ubuntu-latest",
-    "sha256": "7feb0ceab37aefbcbbc496ea5c017e2a23c992a73b46844a2a75b525a4ef1fe1"
+    "sha256": "24a264f7e5769df326e2e93a9bb1f4d69967da5c48625297704e3f01f7c8f38f"
    },
    {
     "path": "experiments/software-validation/results/macos-latest",
-    "sha256": "8f6f049fd01d5f1cd619b1918766d86f60b44980b28a9b121a0a6ea939ee1752"
+    "sha256": "5ac3e1298857bba0760609df51de6a5a5de8b20f8c33e1e11d2f30a07e55108e"
    },
    {
     "path": "experiments/software-validation/results/windows-latest",
-    "sha256": "b745ec1f79a7f537e5d16e23e5458293958860a4007e10f1d455328ad45c18ae"
+    "sha256": "dfe105a7878a29d1d11512a1ff3eeb51500469ef0e4ee36d5b260544b68ba3cc"
    }
   ],
-  "commit": "d42cd40d8d16f812b6bcd5a50bcd13e27cbddb13",
-  "now": "2026-10-31T00:00:00Z",
+  "commit": "1cf68e720f65ed10984e71f6d374ace1ab8dca57",
+  "now": "2026-10-31T15:53:27Z",
   "osaudit": "0.7.0"
  }
 }

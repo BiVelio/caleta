@@ -31,6 +31,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--runner-os", default=platform.system().lower())
+    parser.add_argument("--expected-unit-tests", type=int)
     args = parser.parse_args()
     output = args.output_dir
     output.mkdir(parents=True, exist_ok=True)
@@ -41,6 +42,8 @@ def main():
     failed = sum(item[1] for item in counts)
     if not counts:
         raise RuntimeError("no Rust test summaries found")
+    if args.expected_unit_tests is not None and passed != args.expected_unit_tests:
+        raise RuntimeError(f"expected {args.expected_unit_tests} passing unit tests, found {passed}")
 
     e2e_report = output / "mock-e2e.json"
     env = dict(

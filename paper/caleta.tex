@@ -37,7 +37,7 @@
 \newcommand{\softwareversion}{0.1.0}
 \newcommand{\paperdate}{31 October 2026}
 \newcommand{\schema}[1]{\texttt{#1}}
-\newcommand{\artifact}[2]{\href{https://github.com/BiVelio/caleta/blob/evidence-v1.0/#1}{#2}}
+\newcommand{\artifact}[2]{\href{https://github.com/BiVelio/caleta/blob/evidence-v1.1/#1}{#2}}
 
 \title{Caleta: An Evidence-Oriented Trust Layer for\\Reproducible Local Large Language Model Inference\\[0.6em]
 \large Technical Preprint --- Software Validation Manuscript}
@@ -55,12 +55,12 @@ Copyright \copyright\ 2026 BiVelio Inc. This manuscript is licensed under \href{
 Corresponding author: Joan-Marc Fisa (\texttt{jmfisa@bivelio.com}).\\[0.8em]
 Software reference implementation: Caleta v\softwareversion, Apache-2.0.\\[0.8em]
 Code and evidence: \url{https://github.com/BiVelio/caleta}.\\[0.8em]
-Zenodo DOI: \href{https://doi.org/10.5281/zenodo.23836099}{10.5281/zenodo.23836099}.\\[0.8em]
+Zenodo DOI: \href{https://doi.org/10.5281/zenodo.23839381}{10.5281/zenodo.23839381}.\\[0.8em]
 \textbf{Status:} non-peer-reviewed technical preprint.
 \end{center}
 
 \begin{abstract}
-Local large language model (LLM) inference is often described as private, verified, or reproducible without separating the technical claims behind those terms. This paper presents \textbf{Caleta}, an Apache-2.0 process supervisor and evidence layer around llama.cpp rather than a new inference engine. Caleta combines versioned manifests, exact-size and SHA-256 verification, controlled backend construction, a restricted OpenAI-compatible proxy, prompt-free execution records, benchmark reports, and a small conformance suite. Its contribution is the composition of these mechanisms into explicit contracts that distinguish integrity from authenticated provenance and privacy controls from operating-system isolation. We evaluate the implementation through static checks, \artifact{experiments/software-validation/results/table1-software-validation.json}{fifteen unit tests}, deterministic end-to-end tests on Ubuntu, macOS, and Windows, and a pinned real-model experiment on Windows CPU using Qwen2.5-0.5B-Instruct Q4\_K\_M and llama.cpp b11981. The real experiment validates artifact verification, startup, model listing, non-streaming and server-sent-event chat, and conformance. Three independent benchmark invocations produced fifteen successful warm requests with no failures. In this single configuration, median time to first token was \artifact{experiments/real-gguf-qwen2.5-0.5b/results/summary.json}{18.066 ms} and median decode throughput was \artifact{experiments/real-gguf-qwen2.5-0.5b/results/summary.json}{54.394 tokens/s}. These descriptive measurements do not establish cross-engine superiority, output quality, energy efficiency, or hardware-general performance. Raw JSON, commands, and environment metadata are published. Remaining challenges include signed manifests, time-of-check/time-of-use replacement, operating-system containment, proxy-overhead measurement, and broader experimental matrices.
+Local large language model (LLM) inference is often described as private, verified, or reproducible without separating the technical claims behind those terms. This paper presents \textbf{Caleta}, an Apache-2.0 process supervisor and evidence layer around llama.cpp rather than a new inference engine. Caleta combines versioned manifests, exact-size and SHA-256 verification, controlled backend construction, a restricted OpenAI-compatible proxy, prompt-free execution records, benchmark reports, and a small conformance suite. Its contribution is the composition of these mechanisms into explicit contracts that distinguish integrity from authenticated provenance and privacy controls from operating-system isolation. We evaluate the implementation through static checks, \artifact{experiments/software-validation/results/table1-software-validation.json}{22 unit tests}, deterministic end-to-end tests on Ubuntu, macOS, and Windows, and a pinned real-model experiment on Windows CPU using Qwen2.5-0.5B-Instruct Q4\_K\_M and llama.cpp b11981. The real experiment validates artifact verification, startup, model listing, non-streaming and server-sent-event chat, and conformance. Three independent benchmark invocations produced fifteen successful warm requests with no failures. In this single configuration, median time to first token was \artifact{experiments/real-gguf-qwen2.5-0.5b/results/summary.json}{18.066 ms} and median decode throughput was \artifact{experiments/real-gguf-qwen2.5-0.5b/results/summary.json}{54.394 tokens/s}. These descriptive measurements do not establish cross-engine superiority, output quality, energy efficiency, or hardware-general performance. Raw JSON, commands, and environment metadata are published. Remaining challenges include signed manifests, time-of-check/time-of-use replacement, operating-system containment, proxy-overhead measurement, and broader experimental matrices.
 \end{abstract}
 
 \noindent\textbf{Keywords:} local inference; large language models; reproducibility; software supply chain; privacy engineering; benchmarking; provenance; llama.cpp.
@@ -173,7 +173,7 @@ For artifact bytes $a$, declared digest $h$, and declared byte length $b$, execu
 \begin{equation}
 |a| = b \quad \land \quad \operatorname{SHA256}(a) = h.
 \end{equation}
-Verification streams data in 1~MiB blocks, so artifact size does not determine verifier memory usage. When a backend digest is pinned, an explicit backend path is required to avoid treating ambiguous \texttt{PATH} resolution as precise provenance.
+Verification streams data in 1~MiB blocks, so artifact size does not determine verifier memory usage. When a backend digest is pinned, an explicit backend path is required to avoid treating ambiguous \texttt{PATH} resolution as precise provenance. Optional `backend.dependencies` entries pin individual native dependencies by relative path and digest; an empty list does not claim a fully verified native distribution.
 
 This check does not establish that the manifest is truthful, that the model is safe to parse, or that the file cannot be replaced between verification and backend loading. Signed manifests and immutable or otherwise protected storage are therefore separate requirements.
 
@@ -181,13 +181,13 @@ This check does not establish that the manifest is truthful, that the model is s
 
 Before launch, Caleta removes inherited \texttt{LLAMA\_ARG\_*} and \texttt{LLAMA\_API\_KEY} variables that could alter the declared boundary. It generates a fresh 32-byte random internal credential, passes it through the backend environment, and constructs arguments for model, loopback host, ephemeral port, alias, offline mode, disabled Web UI, context size, GPU layers, and optional thread count.
 
-The manifest validator rejects additional arguments that would replace the model or listener, alter credentials, or enable agent tools. This is a reviewed policy for known options, not a universal proof against every future upstream flag. Readiness requires an authenticated health response within a timeout. Premature child exit and readiness timeout are errors. Shutdown terminates and waits for the child, with kill-on-drop as an additional process-lifetime safeguard.
+The manifest validator rejects additional arguments that would replace the model or listener, alter credentials, or enable agent tools. This is a reviewed policy for known options, not a universal proof against every future upstream flag. Readiness requires an authenticated health response within a timeout. Backend \texttt{--version} has a 10-second cap. Benchmark and conformance clients use 120-second timeouts; readiness health polls use shorter per-attempt deadlines within the configured startup timeout. Premature child exit and readiness timeout are errors. Shutdown handles SIGINT and SIGTERM, terminates and waits for the child, checks its final state, and uses kill-on-drop as an additional process-lifetime safeguard. The `/health` endpoint reports actual backend liveness and returns 503 after child exit.
 
 Two residual races remain: another local process may bind a reserved ephemeral port before the child uses it, and an artifact may be replaced after verification. Hostile-local-user deployments require stronger OS-specific mechanisms.
 
 \subsection{Restricted HTTP proxy}
 
-The public server exposes only \texttt{/health}, \texttt{/v1/models}, and \texttt{/v1/chat/completions}, a deliberately small subset of the OpenAI-compatible API \cite{openai}. Non-loopback listeners require a public bearer key of at least sixteen characters, although high-entropy random secrets are recommended. Credential comparison is constant-time. Request bodies are limited to 16~MiB; responses, including server-sent events (SSE), are streamed rather than collected.
+The public server exposes only \texttt{/health}, \texttt{/v1/models}, and \texttt{/v1/chat/completions}, a deliberately small subset of the OpenAI-compatible API \cite{openai}. Model and chat endpoints require a public bearer key of at least sixteen characters by default on every listener, including loopback; unauthenticated loopback requires an explicit development opt-in. The health endpoint does not expose prompts or generation. Credential comparison is constant-time. The proxy accepts at most 32 concurrent requests and times out upstream calls after 120 seconds. Chat requires \texttt{application/json}; model and chat requests validate loopback hosts and browser origins. Request bodies are limited to 16~MiB; responses, including server-sent events (SSE), are streamed rather than collected. Error response bodies are omitted from reports and logs.
 
 The proxy removes hop-by-hop headers and all upstream CORS response headers. Only Caleta's explicit origin allowlist can produce CORS headers. Wildcard origins are rejected. The server provides plain HTTP; remote deployments require a TLS reverse proxy, SSH tunnel, or an appropriately controlled private network. CORS is not an authentication mechanism and does not protect non-browser clients.
 
@@ -199,7 +199,7 @@ Optional execution records use the schema \schema{caleta.dev/execution/v1}. They
 
 \subsection{Benchmark methodology}
 
-A benchmark verifies the artifact, starts one backend, measures cold startup to authenticated readiness, executes warm-up requests, and then measures warm requests in that process. Failed measured requests remain in the report and are excluded only from aggregates of successful measurements. Warm-up failures are logged but are not retained as raw per-run records. A report is written even when all measured requests fail.
+A benchmark verifies the artifact, starts one backend, measures cold startup to authenticated readiness, executes warm-up requests, and then measures warm requests in that process. Failed measured requests remain in the report and are excluded only from aggregates of successful measurements. Any measured failure also produces a nonzero exit status after the report is written. Warm-up failures are logged but are not retained as raw per-run records. A report is written even when all measured requests fail.
 
 For a request sent at $t_0$, the first content-bearing SSE event arrives at $t_1$, and the last such event arrives at $t_n$. Time to first token is defined operationally as
 \begin{equation}
@@ -215,7 +215,7 @@ The schema \schema{caleta.dev/benchmark/v1} stores raw runs, token usage, estima
 
 \subsection{Conformance}
 
-The conformance command checks a deliberately small OpenAI-compatible contract: model listing returns a data array, non-streaming chat contains message content in the expected structure, and streaming chat uses \texttt{text/event-stream}, emits deltas, and terminates with \texttt{data: [DONE]}. The schema is \schema{caleta.dev/conformance/v1}. Passing does not certify tool calls, structured output, multimodality, cancellation, backpressure, fragmented SSE handling, or complete OpenAI compatibility.
+The conformance command checks a deliberately small OpenAI-compatible contract: model listing returns a data array, non-streaming chat contains message content in the expected structure, and streaming chat uses the base MIME \texttt{text/event-stream}, contains structural JSON delta events, and terminates with an exact \texttt{data: [DONE]} event. The schema is \schema{caleta.dev/conformance/v1}. Passing does not certify tool calls, structured output, multimodality, cancellation, backpressure, fragmented SSE handling, or complete OpenAI compatibility.
 
 \section{Implementation and Reproducibility}
 
@@ -275,7 +275,7 @@ Check & Observed result & Supported interpretation \\
 \midrule
 Formatting & Pass & Source conforms to Rust formatting. \\
 Clippy, all targets & Pass with warnings denied & No emitted lint warnings under the configured toolchain. \\
-Unit tests & \artifact{experiments/software-validation/results/windows-latest/unit_tests.json}{15 passed, 0 failed} & Tested manifest, digest, SSE, percentile, authentication, proxy, and exposure cases behave as expected. \\
+Unit tests & \artifact{experiments/software-validation/results/windows-latest/unit_tests.json}{22 passed, 0 failed} & Tested manifest, digest, SSE, percentile, authentication, proxy, health, and exposure cases behave as expected. \\
 Locked build & Pass & Package builds with the committed dependency resolution. \\
 Verification E2E & Pass & Exact size/digest and pinned mock backend are accepted by the workflow. \\
 Serve/authentication E2E & Pass & Supervised proxy starts; missing public credentials are rejected; authorized models and chat requests succeed. \\
@@ -290,7 +290,7 @@ Mock-based inference claims & Not made & The fixture validates orchestration onl
 
 \subsection{Hosted multi-platform confirmation}
 
-After the local validation, GitHub Actions run \href{https://github.com/BiVelio/caleta/actions/runs/41198343615}{41198343615} completed successfully at source revision \texttt{74183995aac0a87f61598ab755d0f72f6358aae7}. The Ubuntu, macOS, and Windows test jobs passed, as did the separate formatting and Clippy job. The Ubuntu and macOS end-to-end runs included graceful-shutdown execution records; the Windows run used forced mock-process shutdown. The \artifact{experiments/software-validation/results/table1-software-validation.json}{committed JSON and logs} preserve all three runner results, including the 45-byte mock artifact and the 15 passing unit tests. This confirms the same mock-based contracts across the three hosted operating systems, but it does not add real-model evidence.
+After the local validation, GitHub Actions run \href{https://github.com/BiVelio/caleta/actions/runs/41216696756}{41216696756} completed successfully at source revision \texttt{730a0727b969d7d6b9311d453253d88a0645b9bb}. The Ubuntu, macOS, and Windows test jobs passed, as did the separate formatting, Clippy, and osaudit jobs. The Ubuntu and macOS end-to-end runs included graceful-shutdown execution records; the Windows run used forced mock-process shutdown. The \artifact{experiments/software-validation/results/table1-software-validation.json}{committed JSON and logs} preserve all three runner results, including the 45-byte mock artifact and the 22 passing unit tests. The evidence tag preserves these outputs together with the final manuscript and documentation. This confirms the same mock-based contracts across the three hosted operating systems, but it does not add real-model evidence.
 
 No tokens-per-second result from the mock is scientifically meaningful. Mock timing is intentionally excluded from the performance claims.
 
@@ -353,7 +353,7 @@ Threat or ambiguity & Current control & Residual risk or non-claim \\
 Artifact substitution & Exact size and SHA-256 before serve/bench & Trusted digest distribution and post-check replacement remain unresolved. \\
 Backend substitution & Optional explicit-path digest & Unpinned PATH resolution remains possible and is reported as such. \\
 Inherited reconfiguration & Remove selected llama.cpp environment options & Other host variables, drivers, and future upstream options remain relevant. \\
-Unauthorized network API use & Bearer authentication outside loopback & No integrated TLS; secret storage and transport are operator responsibilities. \\
+Unauthorized network API use & Bearer authentication on all listeners; explicit local development opt-out & No integrated TLS; secret storage and transport are operator responsibilities. \\
 Permissive upstream CORS & Strip upstream CORS; explicit local allowlist & CORS does not authenticate non-browser clients. \\
 Backend network access & Loopback listener and offline request & No OS-enforced outbound-network denial. \\
 Prompt retention by Caleta & No request/response logs; prompt digest by default & Clients, backend, OS swap, crash reports, and other processes are separate. \\
@@ -414,7 +414,7 @@ Hosted deterministic tests on three operating systems and a pinned real-GGUF exp
 
 \section*{Data and Code Availability}
 
-The reference implementation, test harness, documentation, and release runbook are available at \url{https://github.com/BiVelio/caleta}. The real-model manifest, commands, environment record, raw reports, and aggregate summary are available in the \artifact{experiments/real-gguf-qwen2.5-0.5b/README.md}{experiment artifacts directory}. This manuscript version is assigned DOI \href{https://doi.org/10.5281/zenodo.23836099}{10.5281/zenodo.23836099}; the earlier version remains archived at \href{https://doi.org/10.5281/zenodo.23763881}{10.5281/zenodo.23763881}.
+The reference implementation, test harness, documentation, and release runbook are available at \url{https://github.com/BiVelio/caleta}. The real-model manifest, commands, environment record, raw reports, and aggregate summary are available in the \artifact{experiments/real-gguf-qwen2.5-0.5b/README.md}{experiment artifacts directory}. This manuscript version is assigned DOI \href{https://doi.org/10.5281/zenodo.23839381}{10.5281/zenodo.23839381}; earlier versions remain available through \href{https://doi.org/10.5281/zenodo.23761754}{10.5281/zenodo.23761754}.
 
 \raggedright
 \begin{thebibliography}{99}

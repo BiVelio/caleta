@@ -2,7 +2,9 @@ use crate::manifest::LoadedManifest;
 use anyhow::{bail, Context, Result};
 use rand::{rngs::OsRng, RngCore};
 use std::path::PathBuf;
-use std::process::Stdio;
+use std::process::{ExitStatus, Stdio};
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
 use std::time::{Duration, Instant};
 use tokio::process::{Child, Command};
 
@@ -25,6 +27,7 @@ pub struct Backend {
     pub api_key: String,
     pub executable: PathBuf,
     pub started_in: Duration,
+    pub alive: Arc<AtomicBool>,
 }
 
 impl Backend {
@@ -113,6 +116,7 @@ impl Backend {
             api_key,
             executable,
             started_in: started.elapsed(),
+            alive: Arc::new(AtomicBool::new(true)),
         })
     }
 
@@ -120,20 +124,29 @@ impl Backend {
         self.child.id()
     }
 
+    pub async fn wait(&mut self) -> Result<ExitStatus> {
+        let status = self.child.wait().await?;
+        self.alive.store(false, Ordering::SeqCst);
+        Ok(status)
+    }
+
     pub async fn shutdown(&mut self) -> Result<()> {
         if self.child.try_wait()?.is_none() {
             self.child.kill().await?;
         }
         self.child.wait().await?;
+        self.alive.store(false, Ordering::SeqCst);
         Ok(())
     }
 
     pub async fn version(executable: &PathBuf) -> Option<String> {
-        let output = Command::new(executable)
-            .arg("--version")
-            .output()
-            .await
-            .ok()?;
+        let output = tokio::time::timeout(
+            Duration::from_secs(10),
+            Command::new(executable).arg("--version").output(),
+        )
+        .await
+        .ok()?
+        .ok()?;
         if !output.status.success() {
             return None;
         }

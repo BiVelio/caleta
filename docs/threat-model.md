@@ -13,7 +13,7 @@ A fully malicious host OS, privileged local attacker, compromised Caleta binary,
 | Threat | v0.1 control | Residual risk / non-claim |
 |---|---|---|
 | Artifact changed after download | Exact size and streamed SHA-256 before serve/bench | Expected digest must come from a trusted source; TOCTOU replacement remains possible |
-| Wrong backend binary | Optional explicit-path SHA-256 | Unpinned `PATH` resolution is allowed and reported as unpinned |
+| Wrong backend binary | Optional explicit-path SHA-256 | Unpinned `PATH` resolution is allowed and reported as unpinned; native dependencies are verified only when individually declared with digests |
 | Backend reaches network | Loopback listener, `--offline`, no inherited `LLAMA_ARG_*` | Backend flag is not OS-enforced egress isolation |
 | Unauthorized remote API use | Required bearer key for non-loopback; constant-time comparison | HTTP has no TLS; key quality, transport, and client storage remain operator duties |
 | Browser cross-origin abuse | No CORS by default; explicit origins only; upstream CORS stripped | Non-browser clients ignore CORS; authentication remains necessary |
@@ -28,7 +28,7 @@ A fully malicious host OS, privileged local attacker, compromised Caleta binary,
 
 Any local process may attempt to connect to a loopback port. Caleta's internal random key reduces accidental or opportunistic access, but it is not protection against a privileged inspector. Reserving an ephemeral port before launching the backend also has a small race: another local process could bind it between reservation and child startup. Readiness would then fail or communicate with the wrong service; deployments with hostile local users need OS-specific socket passing, stronger isolation, and additional tests.
 
-The public `/health` endpoint is unauthenticated and reveals only service name, status, and Caleta version. Model listing and chat require the public key when configured. Caleta does not forward arbitrary backend routes such as metrics, props, slots, or tools.
+The public `/health` endpoint is unauthenticated and reveals only service name, liveness, and Caleta version. Every listener requires a public key by default, including loopback; the explicit development opt-out allows unauthenticated loopback only. Model listing and chat also enforce JSON content type, loopback host checks, an origin allowlist, timeouts, and a concurrency limit. Caleta does not forward arbitrary backend routes such as metrics, props, slots, or tools.
 
 ## Recommended deployment
 

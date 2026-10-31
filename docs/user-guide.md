@@ -139,14 +139,15 @@ A successful result means **integrity only**. It does not prove publisher identi
 ## 6. Start the local API
 
 ```bash
+export CALETA_API_KEY='replace-with-a-long-random-secret'
 caleta serve model.toml --record-out execution.json
 ```
 
-The public listener defaults to `http://127.0.0.1:8080`. The supervised backend uses a separate random internal credential, binds to `127.0.0.1` on an ephemeral port, and receives `--offline` and `--no-webui`.
+The public listener defaults to `http://127.0.0.1:8080` and requires a public API key on every listener. The supervised backend uses a separate random internal credential, binds to `127.0.0.1` on an ephemeral port, and receives `--offline` and `--no-webui`.
 
-Leave the service running in this terminal. On Unix, stop it with Ctrl-C to perform graceful shutdown and write the execution record. Do not put secrets in the manifest.
+Leave the service running in this terminal. On Unix, stop it with Ctrl-C or SIGTERM to perform graceful shutdown and write the execution record. Do not put secrets in the manifest. For local development only, `--allow-unauthenticated-loopback` explicitly permits unauthenticated local requests.
 
-To require a public API key even on loopback, set it before starting:
+To set the required public API key before starting:
 
 Linux/macOS:
 
@@ -192,7 +193,7 @@ curl http://127.0.0.1:8080/v1/chat/completions \
   }'
 ```
 
-Omit the Authorization header if no public key is configured. The supported surface is deliberately small: `/health`, `/v1/models`, and `/v1/chat/completions`. It is not the complete OpenAI API.
+Omit the Authorization header only when the explicit `--allow-unauthenticated-loopback` development flag is enabled. The supported surface is deliberately small: `/health`, `/v1/models`, and `/v1/chat/completions`. It is not the complete OpenAI API.
 
 ## 8. Check conformance
 

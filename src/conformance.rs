@@ -143,7 +143,7 @@ async fn send(builder: reqwest::RequestBuilder, api_key: Option<&str>) -> Result
     let status = response.status();
     let value: Value = response.json().await.context("response is not JSON")?;
     if !status.is_success() {
-        bail!("HTTP {status}: {value}");
+        bail!("HTTP {status}: error response body omitted");
     }
     Ok(value)
 }
@@ -155,10 +155,10 @@ fn check(name: &str, result: &Result<Value>, predicate: impl FnOnce(&Value) -> b
             passed: true,
             detail: "valid response shape".into(),
         },
-        Ok(value) => Check {
+        Ok(_value) => Check {
             name: name.into(),
             passed: false,
-            detail: format!("unexpected response shape: {value}"),
+            detail: "unexpected response shape; response body omitted".into(),
         },
         Err(error) => Check {
             name: name.into(),
@@ -188,21 +188,88 @@ async fn stream_check(
         .headers()
         .get(reqwest::header::CONTENT_TYPE)
         .and_then(|value| value.to_str().ok())
+        .and_then(|value| value.split(';').next())
         .unwrap_or_default()
+        .trim()
         .to_string();
-    if !content_type.starts_with("text/event-stream") {
+    if content_type != "text/event-stream" {
         bail!("expected text/event-stream, received {content_type:?}");
     }
     let mut stream = response.bytes_stream();
     let mut text = String::new();
     while let Some(chunk) = stream.next().await {
-        text.push_str(&String::from_utf8_lossy(&chunk?));
+        let chunk = chunk?;
+        if text.len() + chunk.len() > 16 * 1024 * 1024 {
+            bail!("SSE response exceeded the 16 MiB limit");
+        }
+        text.push_str(&String::from_utf8_lossy(&chunk));
     }
-    if !text.contains("data: [DONE]") {
-        bail!("stream did not contain data: [DONE]");
-    }
-    if !text.contains("\"delta\"") {
-        bail!("stream did not contain an OpenAI-style delta");
-    }
+    validate_sse_events(&text)?;
     Ok("SSE content type, delta events and [DONE] observed".into())
+}
+
+fn validate_sse_events(text: &str) -> Result<()> {
+    let normalized = text.replace("\r\n", "\n");
+    let mut has_delta = false;
+    let mut has_done = false;
+    for event in normalized.split("\n\n") {
+        let data = event
+            .lines()
+            .filter_map(|line| line.trim_start().strip_prefix("data:"))
+            .map(str::trim)
+            .collect::<Vec<_>>()
+            .join("\n");
+        if data.is_empty() {
+            continue;
+        }
+        if data == "[DONE]" {
+            has_done = true;
+            continue;
+        }
+        let value: Value = serde_json::from_str(&data).context("invalid SSE JSON event")?;
+        if value
+            .get("choices")
+            .and_then(Value::as_array)
+            .map(|choices| choices.iter().any(|choice| choice.get("delta").is_some()))
+            .unwrap_or(false)
+        {
+            has_delta = true;
+        }
+    }
+    if !has_done {
+        bail!("stream did not contain an exact data: [DONE] event");
+    }
+    if !has_delta {
+        bail!("stream did not contain an OpenAI-style delta object");
+    }
+    Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn accepts_structural_sse() {
+        let stream = "data: {\"choices\":[{\"delta\":{\"content\":\"ok\"}}]}\n\ndata: [DONE]\n\n";
+        assert!(validate_sse_events(stream).is_ok());
+    }
+
+    #[test]
+    fn rejects_text_that_only_looks_like_sse() {
+        assert!(validate_sse_events("garbage \"delta\" data: [DONE]").is_err());
+    }
+
+    #[test]
+    fn rejects_invalid_json_event() {
+        assert!(validate_sse_events("data: not-json\n\ndata: [DONE]\n\n").is_err());
+    }
+
+    #[test]
+    fn omits_unexpected_response_bodies() {
+        let result = check("privacy", &Ok(json!({"secret":"do-not-publish"})), |_| {
+            false
+        });
+        assert!(!result.detail.contains("do-not-publish"));
+    }
 }

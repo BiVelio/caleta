@@ -14,6 +14,8 @@ instruments = [
   "experiments/real-gguf-qwen2.5-0.5b/scripts/aggregate_results.py",
   "tests/aggregate_validation.py",
   "tests/collect_parameters.py",
+  "tests/collect_system_metadata.py",
+  "tests/repeat_json.py",
 ]
 
 [[numbers.allow]]
@@ -33,9 +35,14 @@ value = "256"
 reason = "SHA-256 algorithm identifier"
 
 [[numbers.allow]]
-value = "41198343615"
+value = "41216696756"
 reason = "public GitHub Actions validation run identifier"
-url = "https://github.com/BiVelio/caleta/actions/runs/41198343615"
+url = "https://github.com/BiVelio/caleta/actions/runs/41216696756"
+
+[[numbers.allow]]
+value = "503"
+reason = "HTTP Service Unavailable status for backend liveness"
+url = "https://www.rfc-editor.org/rfc/rfc9110.html#name-503-service-unavailable"
 
 [[numbers.allow]]
 value = "10"

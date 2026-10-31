@@ -2,9 +2,9 @@
   "schema": "caleta.dev/software-validation/v1",
   "os": "windows-local",
   "arch": "amd64",
-  "source_revision": "3fe356863ee6910db24358090498922b5079996d",
+  "source_revision": "da46ded466ded258c43085a413b55c88d5ebc854",
   "unit_tests": {
-    "passed": 15,
+    "passed": 22,
     "failed": 0
   },
   "mock_e2e": {

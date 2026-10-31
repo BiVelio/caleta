@@ -81,7 +81,7 @@ gpu_layers = 0
             except Exception:
                 time.sleep(0.1)
         else:
-            raise RuntimeError("server did not become ready")
+            raise RuntimeError(f"server did not become ready: {process.stderr.read().decode()}")
 
         try:
             request("/v1/models", authorized=False)
@@ -114,6 +114,14 @@ gpu_layers = 0
         except subprocess.TimeoutExpired:
             process.kill()
             process.wait()
+    assert process.returncode is not None
+    if os.name != "nt":
+        assert process.returncode == 0
+    try:
+        request("/health", authorized=False)
+        raise AssertionError("backend or proxy remained reachable after shutdown")
+    except Exception:
+        pass
     if os.name != "nt":
         assert json.loads(record.read_text())["prompt_content_recorded"] is False
 
@@ -149,6 +157,7 @@ if report_path:
             "failed_runs": report["summary"]["failed_runs"],
         },
         "shutdown": "forced" if os.name == "nt" else "graceful",
+        "backend_stopped": True,
         "execution_record_validated": os.name != "nt",
         "checks": [
             "verify", "serve", "auth", "models", "sse", "conformance", "bench"

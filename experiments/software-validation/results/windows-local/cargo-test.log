@@ -1,26 +1,33 @@
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.29s
-     Running unittests src\lib.rs (target\debug\deps\caleta-e801359d287040c9.exe)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.30s
+     Running unittests src\lib.rs (target\debug\deps\caleta-0e3d46c646bc7c8b.exe)
 
-running 15 tests
+running 22 tests
 test bench::tests::computes_percentiles ... ok
 test bench::tests::ignores_done ... ok
-test server::tests::non_loopback_requires_key ... ok
+test conformance::tests::omits_unexpected_response_bodies ... ok
+test conformance::tests::rejects_invalid_json_event ... ok
+test conformance::tests::accepts_structural_sse ... ok
 test bench::tests::parses_content_and_usage ... ok
-test manifest::tests::rejects_short_digest ... ok
-test manifest::tests::rejects_unpinned_backend_digest ... ok
-test verify::tests::reports_missing_file ... ok
+test conformance::tests::rejects_text_that_only_looks_like_sse ... ok
 test manifest::tests::accepts_minimal_manifest ... ok
 test manifest::tests::rejects_network_override ... ok
 test manifest::tests::rejects_agent_tools ... ok
+test manifest::tests::rejects_unpinned_backend_digest ... ok
+test manifest::tests::rejects_short_digest ... ok
+test server::tests::non_loopback_requires_key ... ok
+test server::tests::loopback_requires_key_by_default ... ok
+test verify::tests::reports_missing_file ... ok
+test server::tests::health_reports_backend_failure ... ok
 test verify::tests::detects_modified_content ... ok
 test verify::tests::verifies_content_and_size ... ok
 test server::tests::rejects_missing_public_credentials ... ok
+test server::tests::rejects_non_json_and_hostile_loopback_requests ... ok
 test server::tests::preserves_sse_stream ... ok
 test server::tests::forwards_models_with_internal_credentials ... ok
 
-test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.30s
+test result: ok. 22 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
-     Running unittests src\main.rs (target\debug\deps\caleta-3341157727a47fda.exe)
+     Running unittests src\main.rs (target\debug\deps\caleta-7df228c6e5f8b22a.exe)
 
 running 0 tests
 

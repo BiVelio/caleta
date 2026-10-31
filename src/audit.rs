@@ -20,6 +20,7 @@ pub struct ExecutionRecord {
     pub backend_kind: String,
     pub backend_path: PathBuf,
     pub backend_sha256: Option<String>,
+    pub backend_dependencies: Vec<String>,
     pub backend_version: Option<String>,
     pub listen: SocketAddr,
     pub backend_loopback_only: bool,
@@ -56,6 +57,13 @@ impl ExecutionRecord {
             backend_kind: loaded.manifest.backend.kind.clone(),
             backend_path: loaded.backend_path(),
             backend_sha256: loaded.manifest.backend.sha256.clone(),
+            backend_dependencies: loaded
+                .manifest
+                .backend
+                .dependencies
+                .iter()
+                .map(|dependency| format!("{}:{}", dependency.path.display(), dependency.sha256))
+                .collect(),
             backend_version,
             listen,
             backend_loopback_only: true,
