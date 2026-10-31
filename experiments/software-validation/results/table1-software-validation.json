@@ -48,10 +48,10 @@
    },
    {
     "path": "experiments/software-validation/results/windows-latest",
-    "sha256": "b745ec1f79a7f537e5d16e23e5458293958860a4007e10f1d455328ad45c18ae"
+    "sha256": "aa1a9728e32cbfbd350b5a39503a5631f34ebd5c7d19ea9af7648785b260de3c"
    }
   ],
-  "commit": "d42cd40d8d16f812b6bcd5a50bcd13e27cbddb13",
+  "commit": "e32fdcb24f5a15f35532c4d3a4b1aaecdd51018e",
   "now": "2026-10-31T00:00:00Z",
   "osaudit": "0.7.0"
  }
