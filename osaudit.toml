@@ -16,24 +16,6 @@ instruments = [
   "tests/collect_parameters.py",
 ]
 
-[[results.depends]]
-file = "experiments/real-gguf-qwen2.5-0.5b/results/summary.json"
-instruments = ["experiments/real-gguf-qwen2.5-0.5b/scripts/aggregate_results.py"]
-
-[[results.depends]]
-file = "experiments/software-validation/results/table1-software-validation.json"
-instruments = ["tests/aggregate_validation.py"]
-
-[[results.depends]]
-file = "experiments/implementation-parameters.json"
-instruments = ["tests/collect_parameters.py"]
-
-[[results.manual]]
-file = "experiments/real-gguf-qwen2.5-0.5b/results/environment.json"
-by = "Joan-Marc Fisa"
-date = "2026-10-29"
-reason = "host, backend, model and runtime metadata collected from the validation system"
-
 [[numbers.allow]]
 value = "2026"
 reason = "publication and access dates"
