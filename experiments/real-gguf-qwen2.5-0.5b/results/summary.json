@@ -1,31 +1,56 @@
 {
-  "schema": "caleta.dev/validation-summary/v1",
-  "model_id": "qwen/qwen2.5-0.5b-instruct:q4_k_m",
-  "independent_cold_starts": 3,
-  "measured_warm_requests": 15,
-  "failed_measured_requests": 0,
-  "warmup_requests_per_cold_start": 2,
-  "cold_start_ms": {
-    "median": 835.3711000000001,
-    "min": 660.7195,
-    "max": 977.1287
-  },
-  "ttft_ms": {
-    "median": 18.066100000000002,
-    "min": 14.5739,
-    "max": 28.0037
-  },
-  "decode_tps": {
-    "median": 54.39367499986402,
-    "min": 49.027935572934624,
-    "max": 68.1384794541394,
-    "sample_stdev": 6.616911002658577
-  },
-  "notes": [
-    "Three independent invocations; two warmups and five measured requests per invocation.",
-    "Repeated prompts within each backend process may benefit from caching.",
-    "TTFT includes HTTP and queueing; observed prefill is not a cold kernel measurement.",
-    "CPU-only Windows x86_64, four threads, context 2048, Q4_K_M, seed 42, temperature 0.",
-    "No cross-engine comparison, energy, memory, quality, or safety evaluation."
-  ]
+ "schema": "caleta.dev/validation-summary/v1",
+ "model_id": "qwen/qwen2.5-0.5b-instruct:q4_k_m",
+ "independent_cold_starts": 3,
+ "measured_warm_requests": 15,
+ "failed_measured_requests": 0,
+ "warmup_requests_per_cold_start": 2,
+ "cold_start_ms": {
+  "median": 835.3711000000001,
+  "min": 660.7195,
+  "max": 977.1287
+ },
+ "ttft_ms": {
+  "median": 18.066100000000002,
+  "min": 14.5739,
+  "max": 28.0037
+ },
+ "decode_tps": {
+  "median": 54.39367499986402,
+  "min": 49.027935572934624,
+  "max": 68.1384794541394,
+  "sample_stdev": 6.616911002658577
+ },
+ "notes": [
+  "Three independent invocations; two warmups and five measured requests per invocation.",
+  "Repeated prompts within each backend process may benefit from caching.",
+  "TTFT includes HTTP and queueing; observed prefill is not a cold kernel measurement.",
+  "CPU-only Windows x86_64, four threads, context 2048, Q4_K_M, seed 42, temperature 0.",
+  "No cross-engine comparison, energy, memory, quality, or safety evaluation."
+ ],
+ "provenance": {
+  "schema": "https://github.com/ASSERT-KTH/assert-research-agent/blob/main/schemas/provenance-v1.json",
+  "command": [
+   "python3",
+   "experiments/real-gguf-qwen2.5-0.5b/scripts/aggregate_results.py"
+  ],
+  "cwd": ".",
+  "inputs": [
+   {
+    "path": "experiments/real-gguf-qwen2.5-0.5b/results/benchmark-01.json",
+    "sha256": "bf5145270a6445244b53cd4a0cb6385c6e6cc4aeebfa55b2a6904778d7ff633f"
+   },
+   {
+    "path": "experiments/real-gguf-qwen2.5-0.5b/results/benchmark-02.json",
+    "sha256": "532873ae37e1335b29f9df86103cb8e2012aa48fc408814907aa456eb4e88901"
+   },
+   {
+    "path": "experiments/real-gguf-qwen2.5-0.5b/results/benchmark-03.json",
+    "sha256": "04f849053dd0035d5a3201c31db2fc598724d4640514443f65bb74ed427ebb91"
+   }
+  ],
+  "commit": "91d58e503083db5990bc065e9b49a22d5087cb50",
+  "now": "2026-10-29T11:13:06.615961200Z",
+  "osaudit": "0.7.0"
+ }
 }
