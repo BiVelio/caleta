@@ -42,19 +42,19 @@
   "inputs": [
    {
     "path": "experiments/software-validation/results/ubuntu-latest",
-    "sha256": "3bc8df810d3958ae2fa9283cf217eba2a5e5108a97fa78f4b5bef347db937582"
+    "sha256": "24a264f7e5769df326e2e93a9bb1f4d69967da5c48625297704e3f01f7c8f38f"
    },
    {
     "path": "experiments/software-validation/results/macos-latest",
-    "sha256": "2e9d22cbcf0f60181e365aefcbd537772e589946860dbb4cf5bf99c11ddad763"
+    "sha256": "5ac3e1298857bba0760609df51de6a5a5de8b20f8c33e1e11d2f30a07e55108e"
    },
    {
     "path": "experiments/software-validation/results/windows-latest",
-    "sha256": "ceade347e6e4cc6334dfc8734e9906090b36b3f9a7fcd0de9dc95155b6b787c8"
+    "sha256": "dfe105a7878a29d1d11512a1ff3eeb51500469ef0e4ee36d5b260544b68ba3cc"
    }
   ],
-  "commit": "74a498f77d4c903c14f86bdbe36c63246ac69163",
-  "now": "2026-10-31T15:48:35Z",
+  "commit": "1cf68e720f65ed10984e71f6d374ace1ab8dca57",
+  "now": "2026-10-31T15:53:27Z",
   "osaudit": "0.7.0"
  }
 }
