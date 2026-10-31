@@ -1,22 +1,46 @@
 {
-  "schema": "caleta.dev/software-validation-summary/v1",
-  "unit_tests": {
-    "passed": 15,
-    "failed": 0,
-    "source": "experiments\\software-validation\\results\\windows-local\\unit_tests.json"
-  },
-  "mock_e2e": {
-    "successful_runs": 2,
-    "failed_runs": 0,
-    "artifact_bytes": 45
-  },
-  "hosted_validation": {
-    "operating_systems": 1,
-    "passed": 1,
-    "failed": 0,
-    "runners": [
-      "windows-local"
-    ]
-  },
-  "passed": true
+ "schema": "caleta.dev/software-validation-summary/v1",
+ "unit_tests": {
+  "passed": 15,
+  "failed": 0,
+  "source": "experiments\\software-validation\\results\\windows-local\\unit_tests.json"
+ },
+ "mock_e2e": {
+  "successful_runs": 2,
+  "failed_runs": 0,
+  "artifact_bytes": 45
+ },
+ "hosted_validation": {
+  "operating_systems": 1,
+  "passed": 1,
+  "failed": 0,
+  "runners": [
+   "windows-local"
+  ]
+ },
+ "passed": true,
+ "provenance": {
+  "schema": "https://github.com/ASSERT-KTH/assert-research-agent/blob/main/schemas/provenance-v1.json",
+  "command": [
+   "python3",
+   "tests/aggregate_validation.py",
+   "experiments/software-validation/results/windows-local",
+   "--expected-os",
+   "1",
+   "--local-dir",
+   "experiments/software-validation/results/windows-local",
+   "--output",
+   "experiments/software-validation/results/table1-software-validation.json"
+  ],
+  "cwd": ".",
+  "inputs": [
+   {
+    "path": "experiments/software-validation/results/windows-local",
+    "sha256": "76338162ce388ed2d2471a6c829f4e15d1e22489019a5edff5a7210eff5923f8"
+   }
+  ],
+  "commit": "cc08a4498be24124d39a74d8473b103ff42c5993",
+  "now": "2026-10-31T00:00:00Z",
+  "osaudit": "0.7.0"
+ }
 }
