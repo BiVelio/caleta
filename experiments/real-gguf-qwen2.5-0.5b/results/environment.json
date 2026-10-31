@@ -57,16 +57,16 @@
   "command": [
    "python3",
    "tests/repeat_json.py",
-   "experiments/real-gguf-qwen2.5-0.5b/results/environment.json"
+   "experiments/real-gguf-qwen2.5-0.5b/results/environment-source.json"
   ],
   "cwd": ".",
   "inputs": [
    {
-    "path": "experiments/real-gguf-qwen2.5-0.5b/results/environment.json",
-    "sha256": "d15571600339b635f0f7e91f6b5fb9b83757dd0b2e997fb6a76b52e3504b357e"
+    "path": "experiments/real-gguf-qwen2.5-0.5b/results/environment-source.json",
+    "sha256": "9886881cf2d5cd2a6149f2b0005addee313c04600573da6fd44f0affa7666023"
    }
   ],
-  "commit": "d40ebaf78391bd00673ddcf0b4d899165c9523f6",
+  "commit": "d8643d8b392e6f9ddebb499d90334cd735976be7",
   "now": "2026-10-29T11:11:15Z",
   "osaudit": "0.7.0"
  }
