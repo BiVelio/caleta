@@ -2,9 +2,9 @@
   "schema": "caleta.dev/software-validation/v1",
   "os": "macos-latest",
   "arch": "arm64",
-  "source_revision": "74183995aac0a87f61598ab755d0f72f6358aae7",
+  "source_revision": "f7ae42399653664b2d1a465c94e5b09a9a4a3fdb",
   "unit_tests": {
-    "passed": 15,
+    "passed": 22,
     "failed": 0
   },
   "mock_e2e": {

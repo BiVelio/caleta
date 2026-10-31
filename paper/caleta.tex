@@ -55,7 +55,7 @@ Copyright \copyright\ 2026 BiVelio Inc. This manuscript is licensed under \href{
 Corresponding author: Joan-Marc Fisa (\texttt{jmfisa@bivelio.com}).\\[0.8em]
 Software reference implementation: Caleta v\softwareversion, Apache-2.0.\\[0.8em]
 Code and evidence: \url{https://github.com/BiVelio/caleta}.\\[0.8em]
-Zenodo DOI: \href{https://doi.org/10.5281/zenodo.23836099}{10.5281/zenodo.23836099}.\\[0.8em]
+Zenodo DOI: \href{https://doi.org/10.5281/zenodo.23839381}{10.5281/zenodo.23839381}.\\[0.8em]
 \textbf{Status:} non-peer-reviewed technical preprint.
 \end{center}
 
@@ -187,7 +187,7 @@ Two residual races remain: another local process may bind a reserved ephemeral p
 
 \subsection{Restricted HTTP proxy}
 
-The public server exposes only \texttt{/health}, \texttt{/v1/models}, and \texttt{/v1/chat/completions}, a deliberately small subset of the OpenAI-compatible API \cite{openai}. Every listener requires a public bearer key of at least sixteen characters by default, including loopback; unauthenticated loopback requires an explicit development opt-in. Credential comparison is constant-time. Requests are limited to 32 concurrent tasks and 120 seconds. Chat requires `application/json`, and loopback requests validate host and browser origin. Request bodies are limited to 16~MiB; responses, including server-sent events (SSE), are streamed rather than collected. Error response bodies are omitted from reports and logs.
+The public server exposes only \texttt{/health}, \texttt{/v1/models}, and \texttt{/v1/chat/completions}, a deliberately small subset of the OpenAI-compatible API \cite{openai}. Model and chat endpoints require a public bearer key of at least sixteen characters by default on every listener, including loopback; unauthenticated loopback requires an explicit development opt-in. The health endpoint does not expose prompts or generation. Credential comparison is constant-time. The proxy accepts at most 32 concurrent requests and times out upstream calls after 120 seconds. Chat requires \texttt{application/json}; model and chat requests validate loopback hosts and browser origins. Request bodies are limited to 16~MiB; responses, including server-sent events (SSE), are streamed rather than collected. Error response bodies are omitted from reports and logs.
 
 The proxy removes hop-by-hop headers and all upstream CORS response headers. Only Caleta's explicit origin allowlist can produce CORS headers. Wildcard origins are rejected. The server provides plain HTTP; remote deployments require a TLS reverse proxy, SSH tunnel, or an appropriately controlled private network. CORS is not an authentication mechanism and does not protect non-browser clients.
 
@@ -353,7 +353,7 @@ Threat or ambiguity & Current control & Residual risk or non-claim \\
 Artifact substitution & Exact size and SHA-256 before serve/bench & Trusted digest distribution and post-check replacement remain unresolved. \\
 Backend substitution & Optional explicit-path digest & Unpinned PATH resolution remains possible and is reported as such. \\
 Inherited reconfiguration & Remove selected llama.cpp environment options & Other host variables, drivers, and future upstream options remain relevant. \\
-Unauthorized network API use & Bearer authentication outside loopback & No integrated TLS; secret storage and transport are operator responsibilities. \\
+Unauthorized network API use & Bearer authentication on all listeners; explicit local development opt-out & No integrated TLS; secret storage and transport are operator responsibilities. \\
 Permissive upstream CORS & Strip upstream CORS; explicit local allowlist & CORS does not authenticate non-browser clients. \\
 Backend network access & Loopback listener and offline request & No OS-enforced outbound-network denial. \\
 Prompt retention by Caleta & No request/response logs; prompt digest by default & Clients, backend, OS swap, crash reports, and other processes are separate. \\
@@ -414,7 +414,7 @@ Hosted deterministic tests on three operating systems and a pinned real-GGUF exp
 
 \section*{Data and Code Availability}
 
-The reference implementation, test harness, documentation, and release runbook are available at \url{https://github.com/BiVelio/caleta}. The real-model manifest, commands, environment record, raw reports, and aggregate summary are available in the \artifact{experiments/real-gguf-qwen2.5-0.5b/README.md}{experiment artifacts directory}. This manuscript version is assigned DOI \href{https://doi.org/10.5281/zenodo.23836099}{10.5281/zenodo.23836099}; the earlier version remains archived at \href{https://doi.org/10.5281/zenodo.23763881}{10.5281/zenodo.23763881}.
+The reference implementation, test harness, documentation, and release runbook are available at \url{https://github.com/BiVelio/caleta}. The real-model manifest, commands, environment record, raw reports, and aggregate summary are available in the \artifact{experiments/real-gguf-qwen2.5-0.5b/README.md}{experiment artifacts directory}. This manuscript version is assigned DOI \href{https://doi.org/10.5281/zenodo.23839381}{10.5281/zenodo.23839381}; the earlier version remains archived at \href{https://doi.org/10.5281/zenodo.23763881}{10.5281/zenodo.23763881}.
 
 \raggedright
 \begin{thebibliography}{99}

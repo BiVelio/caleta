@@ -8,7 +8,7 @@ Caleta is an open-source trust layer for local AI inference. It verifies model a
 
 It is **not another inference engine**. Caleta does not implement kernels and does not claim to be faster than Uzu, llama.cpp, MLX, Ollama, or mistral.rs. It makes an existing local runtime easier to inspect, reproduce, and expose safely.
 
-> **Project status:** v0.1.0 experimental. Local software validation passes, including 15 unit tests and deterministic end-to-end checks. A pinned real-GGUF experiment has also passed on one Windows CPU host. Broader hardware, model, and security validation remains necessary. The crates.io name, domains, and trademarks remain subject to owner-side availability checks.
+> **Project status:** v0.1.0 experimental. Local software validation passes, including 22 unit tests and deterministic end-to-end checks. A pinned real-GGUF experiment has also passed on one Windows CPU host. Broader hardware, model, and security validation remains necessary. The crates.io name, domains, and trademarks remain subject to owner-side availability checks.
 
 **New here?** Follow the [complete user guide](docs/user-guide.md). The quick start below is a shorter path for users already familiar with Rust, llama.cpp, and GGUF.
 
@@ -126,7 +126,7 @@ The benchmark reports TTFT, observed prefill throughput, decode throughput, cont
 
 ```text
 OpenAI-compatible client
-          │ public API key (optional on loopback, required otherwise)
+          │ public API key (required unless local development opt-out)
           ▼
       Caleta proxy ─────── /health, execution evidence, CORS policy
           │ random internal key; loopback only

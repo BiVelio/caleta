@@ -63,6 +63,6 @@ The accompanying `zenodo-metadata.json` is an API-oriented metadata draft. It in
 1. Confirm Joan-Marc Fisa consents to the submission and that BiVelio Inc authorizes CC BY 4.0 for the manuscript.
 2. Confirm that the title, abstract, author, affiliation, license, and embedded identifiers match exactly across platforms.
 3. Inspect the final PDF, not only the LaTeX source.
-4. Keep the statements about mock-based validation and absent real-GGUF experiments unchanged.
+4. Keep the deterministic mock-based validation claims separate from the single-host real-GGUF evidence; do not imply that mock throughput measures inference.
 5. Save confirmation screens, identifiers, and submission dates.
 6. After publication, add only the real identifiers to this file and the repository; do not replace a public arXiv submission with a duplicate when an update is required.

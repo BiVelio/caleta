@@ -12,6 +12,7 @@
     "failed_runs": 0
   },
   "shutdown": "graceful",
+  "backend_stopped": true,
   "execution_record_validated": true,
   "checks": [
     "verify",

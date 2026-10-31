@@ -11,7 +11,8 @@ def main():
     parser.add_argument("--local-dir", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--check", action="store_true")
-    parser.add_argument("--expected-unit-tests", type=int, default=15)
+    parser.add_argument("--expected-unit-tests", type=int, required=True)
+    parser.add_argument("--expected-revision")
     args = parser.parse_args()
     if len(args.directories) != args.expected_os:
         raise SystemExit("the number of runner directories does not match --expected-os")
@@ -31,6 +32,8 @@ def main():
     revisions = {unit["source_revision"] for unit, _ in validations}
     if len(revisions) != 1:
         raise SystemExit("runner source revisions differ")
+    if args.expected_revision and revisions != {args.expected_revision}:
+        raise SystemExit("runner evidence does not match the current workflow revision")
     passed = sum(unit["passed"] for unit, _ in validations)
     if passed != args.expected_os:
         raise SystemExit(f"only {passed}/{args.expected_os} runner validations passed")
