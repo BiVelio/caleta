@@ -65,6 +65,7 @@ def main():
     summary = aggregate()
     if args.check:
         expected = json.loads((ROOT / "results" / "summary.json").read_text(encoding="utf-8"))
+        expected.pop("provenance", None)
         if summary != expected:
             print("summary.json does not match the aggregate of the raw benchmark reports", file=sys.stderr)
             return 1
