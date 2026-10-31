@@ -35,8 +35,9 @@
 }
 
 \newcommand{\softwareversion}{0.1.0}
-\newcommand{\paperdate}{29 October 2026}
+\newcommand{\paperdate}{31 October 2026}
 \newcommand{\schema}[1]{\texttt{#1}}
+\newcommand{\artifact}[2]{\href{https://github.com/BiVelio/caleta/blob/evidence-v1.0/#1}{#2}}
 
 \title{Caleta: An Evidence-Oriented Trust Layer for\\Reproducible Local Large Language Model Inference\\[0.6em]
 \large Technical Preprint --- Software Validation Manuscript}
@@ -53,12 +54,13 @@ BiVelio Inc\\
 Copyright \copyright\ 2026 BiVelio Inc. This manuscript is licensed under \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution 4.0 International (CC BY 4.0)}.\\[0.8em]
 Corresponding author: Joan-Marc Fisa (\texttt{jmfisa@bivelio.com}).\\[0.8em]
 Software reference implementation: Caleta v\softwareversion, Apache-2.0.\\[0.8em]
-Zenodo DOI: \href{https://doi.org/10.5281/zenodo.23763881}{10.5281/zenodo.23763881}.\\[0.8em]
+Code and evidence: \url{https://github.com/BiVelio/caleta}.\\[0.8em]
+Earlier-version Zenodo DOI: \href{https://doi.org/10.5281/zenodo.23763881}{10.5281/zenodo.23763881}.\\[0.8em]
 \textbf{Status:} non-peer-reviewed technical preprint.
 \end{center}
 
 \begin{abstract}
-Local large language model (LLM) inference is often described as private, verified, or reproducible without separating the technical claims behind those terms. This paper presents \textbf{Caleta}, an Apache-2.0 process supervisor and evidence layer around llama.cpp rather than a new inference engine. Caleta combines versioned manifests, exact-size and SHA-256 verification, controlled backend construction, a restricted OpenAI-compatible proxy, prompt-free execution records, benchmark reports, and a small conformance suite. Its contribution is the composition of these mechanisms into explicit contracts that distinguish integrity from authenticated provenance and privacy controls from operating-system isolation. We evaluate the implementation through static checks, fifteen unit tests, deterministic end-to-end tests on Ubuntu, macOS, and Windows, and a pinned real-model experiment on Windows CPU using Qwen2.5-0.5B-Instruct Q4\_K\_M and llama.cpp b11981. The real experiment validates artifact verification, startup, model listing, non-streaming and server-sent-event chat, and conformance. Three independent benchmark invocations produced fifteen successful warm requests with no failures. In this single configuration, median time to first token was 18.066 ms and median decode throughput was 54.394 tokens/s. These descriptive measurements do not establish cross-engine superiority, output quality, energy efficiency, or hardware-general performance. Raw JSON, commands, and environment metadata are published. Remaining challenges include signed manifests, time-of-check/time-of-use replacement, operating-system containment, proxy-overhead measurement, and broader experimental matrices.
+Local large language model (LLM) inference is often described as private, verified, or reproducible without separating the technical claims behind those terms. This paper presents \textbf{Caleta}, an Apache-2.0 process supervisor and evidence layer around llama.cpp rather than a new inference engine. Caleta combines versioned manifests, exact-size and SHA-256 verification, controlled backend construction, a restricted OpenAI-compatible proxy, prompt-free execution records, benchmark reports, and a small conformance suite. Its contribution is the composition of these mechanisms into explicit contracts that distinguish integrity from authenticated provenance and privacy controls from operating-system isolation. We evaluate the implementation through static checks, \artifact{experiments/software-validation/results/table1-software-validation.json}{fifteen unit tests}, deterministic end-to-end tests on Ubuntu, macOS, and Windows, and a pinned real-model experiment on Windows CPU using Qwen2.5-0.5B-Instruct Q4\_K\_M and llama.cpp b11981. The real experiment validates artifact verification, startup, model listing, non-streaming and server-sent-event chat, and conformance. Three independent benchmark invocations produced fifteen successful warm requests with no failures. In this single configuration, median time to first token was 18.066 ms and median decode throughput was 54.394 tokens/s. These descriptive measurements do not establish cross-engine superiority, output quality, energy efficiency, or hardware-general performance. Raw JSON, commands, and environment metadata are published. Remaining challenges include signed manifests, time-of-check/time-of-use replacement, operating-system containment, proxy-overhead measurement, and broader experimental matrices.
 \end{abstract}
 
 \noindent\textbf{Keywords:} local inference; large language models; reproducibility; software supply chain; privacy engineering; benchmarking; provenance; llama.cpp.
