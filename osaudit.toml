@@ -14,7 +14,25 @@ instruments = [
   "experiments/real-gguf-qwen2.5-0.5b/scripts/aggregate_results.py",
   "tests/aggregate_validation.py",
   "tests/collect_parameters.py",
+  "tests/collect_system_metadata.py",
+  "tests/repeat_json.py",
 ]
+
+[[results.depends]]
+file = "experiments/real-gguf-qwen2.5-0.5b/results/summary.json"
+instruments = ["experiments/real-gguf-qwen2.5-0.5b/scripts/aggregate_results.py"]
+
+[[results.depends]]
+file = "experiments/real-gguf-qwen2.5-0.5b/results/environment.json"
+instruments = ["tests/repeat_json.py"]
+
+[[results.depends]]
+file = "experiments/software-validation/results/table1-software-validation.json"
+instruments = ["tests/aggregate_validation.py"]
+
+[[results.depends]]
+file = "experiments/implementation-parameters.json"
+instruments = ["tests/collect_parameters.py"]
 
 [[numbers.allow]]
 value = "2026"
