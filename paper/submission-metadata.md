@@ -17,10 +17,11 @@ Use the same scholarly version and metadata on arXiv, Zenodo, and SSRN. Do not c
 - **Abstract:** use `abstract.txt`; it is ASCII-only and shorter than arXiv's 1,920-character limit
 - **Keywords:** local inference; large language models; reproducibility; software supply chain; privacy engineering; benchmarking; provenance; llama.cpp
 - **Code and artifacts:** https://github.com/BiVelio/caleta
-- **Validation evidence:** https://github.com/BiVelio/caleta/actions/runs/41198343615 and tag `evidence-v1.0`.
+- **Validation evidence:** https://github.com/BiVelio/caleta/actions/runs/41216696756 and tag `evidence-v1.1`.
 - **Zenodo v1.0:** published 29 October 2026 at https://zenodo.org/records/23761755 — DOI 10.5281/zenodo.23761755.
 - **Zenodo v1.1:** published 29 October 2026 at https://zenodo.org/records/23763881 — DOI 10.5281/zenodo.23763881; resolution and downloaded PDF checksum verified.
 - **Zenodo v1.2:** published 31 October 2026 at https://zenodo.org/records/23836099 — DOI 10.5281/zenodo.23836099; resolution and downloaded PDF checksum verified.
+- **Zenodo v1.3:** reserved DOI 10.5281/zenodo.23839381; draft 23839381, not yet published.
 - **Zenodo all-versions DOI:** 10.5281/zenodo.23761754
 
 ## arXiv
@@ -29,7 +30,7 @@ Use the same scholarly version and metadata on arXiv, Zenodo, and SSRN. Do not c
 - **Primary category:** cs.SE (Software Engineering).
 - **Cross-list:** cs.CL (Computation and Language), if the submission form permits and the author agrees with the topical fit.
 - **Authors field:** Joan-Marc Fisa (BiVelio Inc)
-- **Comments:** 14 pages, 1 figure, 3 tables. Non-peer-reviewed technical preprint with real-GGUF validation and 20/20 empirical claims traceable to committed data or scripts; osaudit clean. Reference implementation and reproducibility materials: https://github.com/BiVelio/caleta and tag `evidence-v1.0`.
+- **Comments:** 14 pages, 1 figure, 3 tables. Non-peer-reviewed technical preprint with deterministic validation on three operating systems and a single-host real-GGUF experiment. Empirical numbers are traceable to committed data or scripts; osaudit clean. Reference implementation and reproducibility materials: https://github.com/BiVelio/caleta and tag `evidence-v1.1`.
 - **Files:** upload the LaTeX source package, not only the locally generated PDF. arXiv prefers TeX/LaTeX and does not accept PDF generated from TeX as a substitute for the source.
 - **License:** CC BY 4.0. The selected license is irrevocable for that arXiv version.
 - **Journal reference and external DOI:** leave empty unless a genuine corresponding publication identifier exists. Do not put a future arXiv identifier in these fields.
@@ -39,11 +40,11 @@ Use the same scholarly version and metadata on arXiv, Zenodo, and SSRN. Do not c
 
 - **Resource type:** Publication -> Preprint.
 - **Creators:** Fisa, Joan-Marc; affiliation BiVelio Inc.
-- **Files:** final PDF, LaTeX source, plain-text abstract, submission metadata, and CC BY 4.0 license text.
+- **Files:** final PDF, LaTeX source, plain-text abstract, submission metadata, CC BY 4.0 license text, and a ZIP archive of the tracked code and reproducibility evidence.
 - **License:** CC-BY-4.0.
 - **Related identifier:** https://github.com/BiVelio/caleta with relation `isSupplementedBy` and resource type `software`.
 - **DOI:** reserve it in the draft if the DOI should appear inside the PDF. Regenerate the PDF with the reserved value before publishing. Never invent or guess a DOI.
-- **Version:** v1.2-preprint (adds complete empirical traceability, hosted outputs and osaudit validation).
+- **Version:** v1.3-preprint (hardens runtime behavior, refreshes validation evidence, and records implementation limits).
 - **Publication date:** use the actual public deposit date.
 - **Visibility:** public. Preview the record before publishing.
 
