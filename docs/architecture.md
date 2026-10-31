@@ -4,7 +4,7 @@
 
 Caleta v0.1 is a process supervisor and trust boundary around `llama-server`, not a library linked into an inference engine and not a new kernel implementation. This keeps the core small, preserves GGUF interoperability, inherits platform support from llama.cpp, and allows the manifest and report formats to be reused by other runtimes.
 
-The public proxy and benchmark client use a separate internal credential on every backend launch. The backend binds only to IPv4 loopback. The public listener defaults to loopback and requires a key for any non-loopback address. Prompts and responses pass through memory but are not logged or persisted by Caleta. Request bodies are buffered with a 16 MiB limit; response bodies, including SSE, are streamed without collection.
+The public proxy and benchmark client use a separate internal credential on every backend launch. The backend binds only to IPv4 loopback. The public listener defaults to loopback and requires an API key on every listener; unauthenticated loopback requires an explicit development opt-in. Public requests are limited to 32 concurrent tasks and 120 seconds, and `/health` reports backend liveness. Prompts and responses pass through memory but are not logged or persisted by Caleta. Request bodies are buffered with a 16 MiB limit; response bodies, including SSE, are streamed without collection. Error response bodies are omitted from logs and reports.
 
 ## Components
 

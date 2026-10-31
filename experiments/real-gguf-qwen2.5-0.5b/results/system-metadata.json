@@ -1,0 +1,55 @@
+{
+  "schema": "caleta.dev/system-metadata/v1",
+  "collection_method": "actual command execution",
+  "records": {
+    "platform": {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-c",
+        "import platform; print(platform.platform())"
+      ],
+      "returncode": 0,
+      "stdout": "Windows-10-10.0.19045-SP0\n",
+      "stderr": ""
+    },
+    "rustc": {
+      "command": [
+        "rustc",
+        "-vV"
+      ],
+      "returncode": 0,
+      "stdout": "rustc 1.94.1 (e408947bf 2026-03-25)\nbinary: rustc\ncommit-hash: e408947bfd200af42db322daf0fadfe7e26d3bd1\ncommit-date: 2026-03-25\nhost: x86_64-pc-windows-msvc\nrelease: 1.94.1\nLLVM version: 21.1.8\n",
+      "stderr": ""
+    },
+    "caleta_revision": {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stdout": "52b370de35b2f01d7bb96bc11987be3ebb06d9df\n",
+      "stderr": ""
+    },
+    "host": {
+      "command": [
+        "powershell.exe",
+        "-NoProfile",
+        "-Command",
+        "$cs=Get-CimInstance Win32_ComputerSystem; $cpu=Get-CimInstance Win32_Processor; $os=Get-CimInstance Win32_OperatingSystem; [pscustomobject]@{Model=$cs.Model;CPU=$cpu.Name;Cores=$cpu.NumberOfCores;LogicalProcessors=$cpu.NumberOfLogicalProcessors;RAM_GiB=[math]::Round($cs.TotalPhysicalMemory/1GB,2);OS=$os.Caption;OSVersion=$os.Version;Architecture=$os.OSArchitecture} | ConvertTo-Json"
+      ],
+      "returncode": 0,
+      "stdout": "{\n    \"Model\":  \"MS-7A78\",\n    \"CPU\":  \"Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz\",\n    \"Cores\":  4,\n    \"LogicalProcessors\":  8,\n    \"RAM_GiB\":  15.96,\n    \"OS\":  \"Microsoft Windows 10 Home\",\n    \"OSVersion\":  \"10.0.19045\",\n    \"Architecture\":  \"64 bits\"\n}\n",
+      "stderr": ""
+    },
+    "backend_version": {
+      "command": [
+        "..\\validation\\real-gguf\\backend\\bin\\llama-server.exe",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "version: 0.8.0-dev (build 11981, commit da6c30ade)\nbuilt with Clang 20.1.8 for Windows x86_64\n"
+    }
+  }
+}

@@ -64,6 +64,9 @@ struct ServeArgs {
     /// Optional prompt-free execution evidence JSON.
     #[arg(long)]
     record_out: Option<PathBuf>,
+    /// Allow unauthenticated requests only when the listener is loopback.
+    #[arg(long)]
+    allow_unauthenticated_loopback: bool,
 }
 
 #[derive(Args)]
@@ -156,6 +159,7 @@ async fn execute(cli: Cli) -> Result<()> {
                     cors_origins: args.cors_origins,
                     startup_timeout: Duration::from_secs(args.startup_timeout_secs),
                     record_out: args.record_out,
+                    allow_unauthenticated_loopback: args.allow_unauthenticated_loopback,
                 },
             )
             .await?;

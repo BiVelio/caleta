@@ -110,7 +110,10 @@ pub async fn benchmark(loaded: LoadedManifest, options: BenchOptions) -> Result<
     .await?;
     let cold_start_ms = milliseconds(backend.started_in);
     let (peak_rss, stop_monitor, monitor) = monitor_backend(backend.id());
-    let client = reqwest::Client::builder().no_proxy().build()?;
+    let client = reqwest::Client::builder()
+        .no_proxy()
+        .timeout(Duration::from_secs(120))
+        .build()?;
 
     for index in 0..options.warmup {
         if let Err(error) = measure(&client, &backend, &loaded, &options).await {
@@ -142,7 +145,7 @@ pub async fn benchmark(loaded: LoadedManifest, options: BenchOptions) -> Result<
     if let Some(handle) = monitor {
         handle.await.ok();
     }
-    backend.shutdown().await.ok();
+    backend.shutdown().await?;
     let summary = summarize(&records);
     let failed = records
         .iter()
@@ -191,8 +194,8 @@ pub async fn benchmark(loaded: LoadedManifest, options: BenchOptions) -> Result<
         "Benchmark: {successful} ok, {failed} failed; report: {}",
         options.output.display()
     );
-    if successful == 0 {
-        bail!("all benchmark requests failed; raw failures were preserved in the report");
+    if failed > 0 {
+        bail!("{failed} benchmark requests failed; raw failures were preserved in the report");
     }
     Ok(options.output)
 }
@@ -220,11 +223,7 @@ async fn measure(
         .await?;
     if !response.status().is_success() {
         let status = response.status();
-        let message = response.text().await.unwrap_or_default();
-        bail!(
-            "backend returned {status}: {}",
-            message.chars().take(500).collect::<String>()
-        );
+        bail!("backend returned {status}; response body omitted");
     }
 
     let mut stream = response.bytes_stream();

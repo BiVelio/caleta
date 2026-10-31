@@ -32,6 +32,8 @@ pub struct VerificationReport {
     pub artifact: FileVerification,
     pub backend: Option<FileVerification>,
     pub backend_pinned: bool,
+    pub backend_dependencies: Vec<FileVerification>,
+    pub backend_dependencies_verified: bool,
     pub verified: bool,
     /// SHA-256 verifies integrity against the declared digest. Authenticity
     /// still depends on how the manifest and digest were obtained.
@@ -124,11 +126,27 @@ pub async fn verify_manifest(loaded: &LoadedManifest) -> Result<VerificationRepo
         None => None,
     };
 
+    let backend_path = loaded.backend_path();
+    let backend_directory = backend_path.parent().unwrap_or_else(|| Path::new("."));
+    let mut backend_dependencies = Vec::new();
+    for dependency in &loaded.manifest.backend.dependencies {
+        let path = backend_directory.join(&dependency.path);
+        let bytes = tokio::fs::metadata(&path)
+            .await
+            .with_context(|| format!("cannot stat backend dependency {}", path.display()))?
+            .len();
+        backend_dependencies.push(verify_file(path, &dependency.sha256, bytes).await);
+    }
+    let backend_dependencies_verified = backend_dependencies
+        .iter()
+        .all(|item| item.status == IntegrityStatus::Verified);
+
     let verified = artifact.status == IntegrityStatus::Verified
         && backend
             .as_ref()
             .map(|item| item.status == IntegrityStatus::Verified)
-            .unwrap_or(true);
+            .unwrap_or(true)
+        && backend_dependencies_verified;
 
     Ok(VerificationReport {
         schema: "caleta.dev/verification/v1".into(),
@@ -136,6 +154,8 @@ pub async fn verify_manifest(loaded: &LoadedManifest) -> Result<VerificationRepo
         artifact,
         backend,
         backend_pinned: loaded.manifest.backend.sha256.is_some(),
+        backend_dependencies,
+        backend_dependencies_verified,
         verified,
         authenticity: "integrity_only; trust_requires_a_verified_manifest_source".into(),
     })

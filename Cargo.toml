@@ -28,6 +28,7 @@ sha2 = "0.10"
 subtle = "2.6"
 tokio = { version = "1.48", features = ["full"] }
 toml = "0.9"
+tower = { version = "0.5", features = ["limit"] }
 tower-http = { version = "0.6", features = ["cors"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
@@ -35,7 +36,6 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 [dev-dependencies]
 http-body-util = "0.1"
 tempfile = "3.23"
-tower = { version = "0.5", features = ["util"] }
 
 [profile.release]
 lto = "thin"

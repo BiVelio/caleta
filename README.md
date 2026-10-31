@@ -24,7 +24,7 @@ Local inference is often described as “private” without distinguishing sever
 - **Integrity before execution:** stream SHA-256 verification and check exact file size.
 - **Declared provenance:** every manifest names its source and license. Caleta does not pretend that a hash alone establishes publisher authenticity.
 - **Loopback backend:** `llama-server` is bound to `127.0.0.1`, launched with `--offline`, and given a random internal API key through its environment.
-- **Safe public defaults:** the proxy also starts on loopback. Non-loopback exposure requires an API key of at least 16 characters. CORS is disabled unless explicit origins are supplied.
+- **Safe public defaults:** the proxy also starts on loopback and requires an API key of at least 16 characters on every listener. Unauthenticated loopback requires the explicit `--allow-unauthenticated-loopback` development flag. CORS is disabled unless explicit origins are supplied.
 - **Small API surface:** only `/health`, `/v1/models`, and `/v1/chat/completions`; no agent tools, prompt history, or telemetry.
 - **Evidence, not slogans:** optional execution records and JSON benchmark/conformance reports preserve configuration, failures, and limitations.
 
@@ -78,16 +78,18 @@ Obtain the digest from the publisher when possible. Computing a digest after dow
 ### 2. Verify and serve
 
 ```bash
+export CALETA_API_KEY='replace-with-a-long-random-secret'
 caleta verify examples/model.toml
 caleta serve examples/model.toml --record-out execution.json
 ```
 
-The API listens on `http://127.0.0.1:8080` by default:
+The API listens on `http://127.0.0.1:8080` by default and requires that key on every listener. For local development only, `--allow-unauthenticated-loopback` provides an explicit opt-out:
 
 ```bash
-curl http://127.0.0.1:8080/v1/models
+curl http://127.0.0.1:8080/v1/models -H "Authorization: Bearer $CALETA_API_KEY"
 
 curl http://127.0.0.1:8080/v1/chat/completions \
+  -H "Authorization: Bearer $CALETA_API_KEY" \
   -H 'Content-Type: application/json' \
   -d '{
     "model": "publisher/model:q4",

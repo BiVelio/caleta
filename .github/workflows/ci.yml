@@ -29,7 +29,7 @@ jobs:
         shell: bash
         run: |
           cargo build --locked
-          python3 tests/record_validation.py --output-dir "experiments/software-validation/results/${{ matrix.os }}" --runner-os "${{ matrix.os }}"
+          python3 tests/record_validation.py --output-dir "experiments/software-validation/results/${{ matrix.os }}" --runner-os "${{ matrix.os }}" --expected-unit-tests 22
       - name: upload validation evidence
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
@@ -60,5 +60,10 @@ jobs:
         run: python3 -m pip install "git+https://github.com/ASSERT-KTH/osaudit.git@9f4b7ad02c32ae96f2978c09373a39896af366b8"
       - name: Verify real-model aggregation
         run: python3 experiments/real-gguf-qwen2.5-0.5b/scripts/aggregate_results.py --check
+      - name: Verify software-validation aggregation
+        run: python3 tests/aggregate_validation.py experiments/software-validation/results/ubuntu-latest experiments/software-validation/results/macos-latest experiments/software-validation/results/windows-latest --expected-os 3 --local-dir experiments/software-validation/results/windows-latest --output experiments/software-validation/results/table1-software-validation.json --check --expected-unit-tests 22
+      - name: Verify artifact hashes
+        working-directory: experiments/real-gguf-qwen2.5-0.5b
+        run: sha256sum -c SHA256SUMS.txt
       - name: Audit all empirical claims
         run: osaudit all --json

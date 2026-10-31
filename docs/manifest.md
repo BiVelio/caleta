@@ -16,7 +16,7 @@ The manifest is a declarative execution contract. It is intentionally TOML so th
 | `backend.kind` | string | `llama.cpp` in v0.1 |
 | `backend.executable` | path or name | `llama-server` by default; explicit path required for digest pinning |
 
-`description`, `backend.sha256`, `backend.args`, `runtime`, and `metadata` are optional. Runtime defaults are 4,096 context tokens and `-1` GPU layers, delegating device offload to llama.cpp defaults. `threads` is unset unless declared.
+`description`, `backend.sha256`, `backend.dependencies`, `backend.args`, `runtime`, and `metadata` are optional. Runtime defaults are 4,096 context tokens and `-1` GPU layers, delegating device offload to llama.cpp defaults. `threads` is unset unless declared. Each `backend.dependencies` entry has a manifest-relative path and `sha256`; dependencies are verified only when individually declared, and an empty list does not claim a fully verified native distribution.
 
 ## Backend arguments
 
