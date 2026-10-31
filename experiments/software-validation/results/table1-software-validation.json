@@ -1,24 +1,60 @@
 {
-  "schema": "caleta.dev/software-validation-summary/v1",
-  "unit_tests": {
-    "passed": 22,
-    "failed": 0,
-    "source": "experiments\\software-validation\\results\\windows-latest\\unit_tests.json"
-  },
-  "mock_e2e": {
-    "successful_runs": 2,
-    "failed_runs": 0,
-    "artifact_bytes": 45
-  },
-  "hosted_validation": {
-    "operating_systems": 3,
-    "passed": 3,
-    "failed": 0,
-    "runners": [
-      "ubuntu-latest",
-      "macos-latest",
-      "windows-latest"
-    ]
-  },
-  "passed": true
+ "schema": "caleta.dev/software-validation-summary/v1",
+ "unit_tests": {
+  "passed": 22,
+  "failed": 0,
+  "source": "experiments\\software-validation\\results\\windows-latest\\unit_tests.json"
+ },
+ "mock_e2e": {
+  "successful_runs": 2,
+  "failed_runs": 0,
+  "artifact_bytes": 45
+ },
+ "hosted_validation": {
+  "operating_systems": 3,
+  "passed": 3,
+  "failed": 0,
+  "runners": [
+   "ubuntu-latest",
+   "macos-latest",
+   "windows-latest"
+  ]
+ },
+ "passed": true,
+ "provenance": {
+  "schema": "https://github.com/ASSERT-KTH/assert-research-agent/blob/main/schemas/provenance-v1.json",
+  "command": [
+   "python",
+   "tests/aggregate_validation.py",
+   "experiments/software-validation/results/ubuntu-latest",
+   "experiments/software-validation/results/macos-latest",
+   "experiments/software-validation/results/windows-latest",
+   "--expected-os",
+   "3",
+   "--local-dir",
+   "experiments/software-validation/results/windows-latest",
+   "--output",
+   "experiments/software-validation/results/table1-software-validation.json",
+   "--expected-unit-tests",
+   "22"
+  ],
+  "cwd": ".",
+  "inputs": [
+   {
+    "path": "experiments/software-validation/results/ubuntu-latest",
+    "sha256": "3bc8df810d3958ae2fa9283cf217eba2a5e5108a97fa78f4b5bef347db937582"
+   },
+   {
+    "path": "experiments/software-validation/results/macos-latest",
+    "sha256": "2e9d22cbcf0f60181e365aefcbd537772e589946860dbb4cf5bf99c11ddad763"
+   },
+   {
+    "path": "experiments/software-validation/results/windows-latest",
+    "sha256": "ceade347e6e4cc6334dfc8734e9906090b36b3f9a7fcd0de9dc95155b6b787c8"
+   }
+  ],
+  "commit": "fee65483d9da6fd0822aee2dc0aacadf5a8d62a2",
+  "now": "2026-10-31T15:36:52Z",
+  "osaudit": "0.7.0"
+ }
 }
