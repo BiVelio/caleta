@@ -33,9 +33,9 @@ value = "256"
 reason = "SHA-256 algorithm identifier"
 
 [[numbers.allow]]
-value = "40758287817"
+value = "41198343615"
 reason = "public GitHub Actions validation run identifier"
-url = "https://github.com/BiVelio/caleta/actions/runs/40758287817"
+url = "https://github.com/BiVelio/caleta/actions/runs/41198343615"
 
 [[numbers.allow]]
 value = "10"
