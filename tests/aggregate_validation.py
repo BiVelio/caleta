@@ -53,7 +53,7 @@ def main():
         "unit_tests": {
             "passed": local_unit["unit_tests"]["passed"],
             "failed": local_unit["unit_tests"]["failed"],
-            "source": str(args.local_dir / "unit_tests.json"),
+            "source": (args.local_dir / "unit_tests.json").as_posix(),
         },
         "mock_e2e": {
             "successful_runs": local_mock["benchmark"]["successful_runs"],
