@@ -1,0 +1,22 @@
+{
+  "schema": "caleta.dev/software-validation-summary/v1",
+  "unit_tests": {
+    "passed": 15,
+    "failed": 0,
+    "source": "experiments\\software-validation\\results\\windows-local\\unit_tests.json"
+  },
+  "mock_e2e": {
+    "successful_runs": 2,
+    "failed_runs": 0,
+    "artifact_bytes": 45
+  },
+  "hosted_validation": {
+    "operating_systems": 1,
+    "passed": 1,
+    "failed": 0,
+    "runners": [
+      "windows-local"
+    ]
+  },
+  "passed": true
+}

@@ -4,6 +4,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import platform
 import shutil
 import signal
 import subprocess
@@ -44,6 +45,7 @@ with tempfile.TemporaryDirectory() as temporary:
     model = temp / "model.gguf"
     model.write_bytes(b"not-a-real-model; deterministic mock artifact")
     digest = hashlib.sha256(model.read_bytes()).hexdigest()
+    artifact_bytes = model.stat().st_size
     manifest = temp / "model.toml"
     manifest.write_text(f'''
 schema = "caleta.dev/model/v1"
@@ -131,6 +133,28 @@ gpu_layers = 0
             "powershell.exe", "-NoProfile", "-Command",
             "Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like ('*' + $env:CALETA_TEST_TEMP + '*') } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }",
         ], env=cleanup_env, check=True, capture_output=True)
+
+report_path = os.environ.get("CALETA_E2E_REPORT")
+if report_path:
+    output = Path(report_path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    evidence = {
+        "schema": "caleta.dev/mock-e2e/v1",
+        "os": platform.system().lower(),
+        "arch": platform.machine().lower(),
+        "passed": True,
+        "artifact": {"bytes": artifact_bytes, "sha256": digest},
+        "benchmark": {
+            "successful_runs": report["summary"]["successful_runs"],
+            "failed_runs": report["summary"]["failed_runs"],
+        },
+        "shutdown": "forced" if os.name == "nt" else "graceful",
+        "execution_record_validated": os.name != "nt",
+        "checks": [
+            "verify", "serve", "auth", "models", "sse", "conformance", "bench"
+        ],
+    }
+    output.write_text(json.dumps(evidence, indent=2) + "\n", encoding="utf-8")
 
 if os.name == "nt":
     print("E2E PASS: verify, serve, auth, models, SSE, conformance and bench (forced shutdown)")

@@ -1,0 +1,9 @@
+{
+  "schema": "caleta.dev/implementation-parameters/v1",
+  "internal_api_key_bytes": 32,
+  "max_request_mib": 16,
+  "minimum_public_key_characters": 16,
+  "rss_sample_ms": 50,
+  "verification_buffer_mib": 1,
+  "minimum_rust_version": 1.88
+}

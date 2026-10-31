@@ -25,12 +25,17 @@ jobs:
       - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8
         with:
           toolchain: stable
-      - run: cargo test --locked
-      - name: deterministic end-to-end smoke test
+      - name: record deterministic validation evidence
         shell: bash
         run: |
           cargo build --locked
-          CALETA_BIN=target/debug/caleta python3 tests/e2e_mock.py
+          python3 tests/record_validation.py --output-dir "experiments/software-validation/results/${{ matrix.os }}" --runner-os "${{ matrix.os }}"
+      - name: upload validation evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: validation-${{ matrix.os }}
+          path: experiments/software-validation/results/${{ matrix.os }}
+          if-no-files-found: error
 
   lint:
     name: format and clippy
